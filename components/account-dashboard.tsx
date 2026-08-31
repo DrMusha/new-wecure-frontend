@@ -48,7 +48,7 @@ export function AccountDashboard() {
 
   if (!ready || !user) {
     return (
-      <div className="rounded-[2rem] border border-white/80 bg-white/90 p-8 shadow-sm ring-1 ring-slate-200/70 backdrop-blur">
+      <div className="rounded-[2rem] border border-white/80 bg-white/90 p-5 shadow-sm ring-1 ring-slate-200/70 backdrop-blur sm:p-8">
         <div className="h-4 w-40 animate-pulse rounded-full bg-slate-200" />
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <div className="h-40 animate-pulse rounded-[1.5rem] bg-slate-100" />
@@ -83,24 +83,24 @@ export function AccountDashboard() {
   ];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+    <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
       <section
         id="overview"
-        className="rounded-[2.5rem] border border-white/80 bg-white/95 p-6 shadow-[0_24px_80px_-50px_rgba(15,23,42,0.45)] ring-1 ring-slate-200/70 backdrop-blur sm:p-8"
+        className="rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_24px_80px_-50px_rgba(15,23,42,0.45)] ring-1 ring-slate-200/70 backdrop-blur sm:rounded-[2.5rem] sm:p-8"
       >
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-start gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-blue-500 text-lg font-bold text-white shadow-lg shadow-blue-200">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.25rem] bg-blue-500 text-base font-bold text-white shadow-lg shadow-blue-200 sm:h-16 sm:w-16 sm:rounded-3xl sm:text-lg">
               {initials}
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-700 sm:text-xs sm:tracking-[0.24em]">
                 Account profile
               </p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-gray-950">
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-gray-950 sm:text-3xl">
                 {user.name || "WeCure customer"}
               </h2>
-              <p className="mt-2 text-sm leading-7 text-gray-500">
+              <p className="mt-2 text-sm leading-6 text-gray-500 sm:leading-7">
                 Your profile information is stored from the login session and ready to use across checkout, orders, and your medical card.
               </p>
             </div>
@@ -116,8 +116,8 @@ export function AccountDashboard() {
           </button>
         </div>
 
-        <div id="details" className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-[1.75rem] border border-slate-200/70 bg-slate-50 p-5">
+        <div id="details" className="mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2">
+          <div className="rounded-[1.5rem] border border-slate-200/70 bg-slate-50 p-4 sm:rounded-[1.75rem] sm:p-5">
             <div className="flex items-center gap-2 text-blue-600">
               <UserCircle2 className="h-4 w-4" />
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Personal details</p>
@@ -142,7 +142,7 @@ export function AccountDashboard() {
             </div>
           </div>
 
-          <div id="session" className="rounded-[1.75rem] border border-slate-200/70 bg-blue-50/70 p-5">
+          <div id="session" className="rounded-[1.5rem] border border-slate-200/70 bg-blue-50/70 p-4 sm:rounded-[1.75rem] sm:p-5">
             <div className="flex items-center gap-2 text-blue-600">
               <ShieldCheck className="h-4 w-4" />
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Session status</p>
@@ -165,8 +165,8 @@ export function AccountDashboard() {
       </section>
 
       <aside className="space-y-6">
-        <div id="actions" className="rounded-[2.5rem] border border-white/80 bg-white/95 p-6 shadow-sm ring-1 ring-slate-200/70 backdrop-blur sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">Quick actions</p>
+        <div id="actions" className="rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-sm ring-1 ring-slate-200/70 backdrop-blur sm:rounded-[2.5rem] sm:p-8">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-700 sm:text-xs sm:tracking-[0.24em]">Quick actions</p>
           <div className="mt-5 space-y-3">
             {accountItems.map((item) => {
               const Icon = item.icon;
@@ -174,26 +174,26 @@ export function AccountDashboard() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="group flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50 px-4 py-4 transition hover:border-blue-200 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+                  className="group flex items-start justify-between gap-3 rounded-2xl border border-slate-200/70 bg-slate-50 px-4 py-4 transition hover:border-blue-200 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-blue-600 shadow-sm ring-1 ring-blue-100">
+                  <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-blue-600 shadow-sm ring-1 ring-blue-100 sm:h-11 sm:w-11">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="font-semibold text-gray-950">{item.title}</p>
                       <p className="text-sm leading-6 text-gray-500">{item.description}</p>
                     </div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-gray-400 transition group-hover:translate-x-0.5 group-hover:text-blue-600" />
+                  <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-gray-400 transition group-hover:translate-x-0.5 group-hover:text-blue-600" />
                 </Link>
               );
             })}
           </div>
         </div>
 
-        <div id="help" className="rounded-[2.5rem] border border-white/80 bg-white/95 p-6 shadow-sm ring-1 ring-slate-200/70 backdrop-blur sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">What this profile does</p>
+        <div id="help" className="rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-sm ring-1 ring-slate-200/70 backdrop-blur sm:rounded-[2.5rem] sm:p-8">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-700 sm:text-xs sm:tracking-[0.24em]">What this profile does</p>
           <div className="mt-5 space-y-4">
             <div className="flex items-start gap-3">
               <Mail className="mt-0.5 h-4 w-4 text-blue-600" />

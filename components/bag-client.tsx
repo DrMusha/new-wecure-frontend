@@ -111,11 +111,11 @@ export function BagClient() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="rounded-[2rem] border border-ink-900/10 bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between gap-3">
+    <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+      <section className="rounded-[2rem] border border-ink-900/10 bg-white p-4 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-ink-950">Your bag</h2>
+            <h2 className="text-xl font-semibold text-ink-950 sm:text-2xl">Your bag</h2>
             <p className="mt-1 text-sm text-ink-900/60">{cart.length} items ready for checkout</p>
           </div>
           <Button type="button" variant="ghost" onClick={() => sync([])}>
@@ -123,7 +123,7 @@ export function BagClient() {
           </Button>
         </div>
 
-        <div className="mt-6 space-y-4">
+        <div className="mt-5 space-y-4 sm:mt-6">
           {cart.length > 0 ? (
             cart.map((item) => (
               <div key={item.id} className="flex flex-col gap-4 rounded-3xl border border-ink-900/10 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -133,7 +133,7 @@ export function BagClient() {
                     ZMW {item.price.toFixed(2)} {item.packSize ? `• ${item.packSize}` : ""}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Button variant="secondary" type="button" onClick={() => sync(updateCartItem(item.id, item.quantity - 1))}>
                     -
                   </Button>
@@ -148,21 +148,21 @@ export function BagClient() {
               </div>
             ))
           ) : (
-            <div className="rounded-3xl border border-dashed border-ink-900/10 bg-sand-50 p-8 text-sm text-ink-900/65">
+            <div className="rounded-3xl border border-dashed border-ink-900/10 bg-sand-50 p-6 text-sm text-ink-900/65 sm:p-8">
               Your bag is empty. Browse the catalog and add products from the product detail page.
             </div>
           )}
         </div>
 
-        <div className="mt-6 rounded-3xl bg-ink-950 p-5 text-white">
-          <p className="text-sm uppercase tracking-[0.22em] text-brand-300">Total</p>
-          <p className="mt-2 text-3xl font-semibold">ZMW {total.toFixed(2)}</p>
+        <div className="mt-6 rounded-3xl bg-ink-950 p-4 text-white sm:p-5">
+          <p className="text-xs uppercase tracking-[0.18em] text-brand-300 sm:text-sm sm:tracking-[0.22em]">Total</p>
+          <p className="mt-2 text-2xl font-semibold sm:text-3xl">ZMW {total.toFixed(2)}</p>
         </div>
       </section>
 
       <aside className="space-y-6">
-        <section className="rounded-[2rem] border border-ink-900/10 bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-semibold text-ink-950">Delivery details</h2>
+        <section className="rounded-[2rem] border border-ink-900/10 bg-white p-4 shadow-sm sm:p-6">
+          <h2 className="text-xl font-semibold text-ink-950 sm:text-2xl">Delivery details</h2>
           <div className="mt-5 grid gap-4">
             <Input value={delivery.address} onChange={(e) => setDelivery((prev) => ({ ...prev, address: e.target.value }))} placeholder="Address" />
             <div className="grid gap-4 sm:grid-cols-2">
@@ -177,9 +177,9 @@ export function BagClient() {
           </div>
         </section>
 
-        <section className="rounded-[2rem] border border-ink-900/10 bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-semibold text-ink-950">Checkout</h2>
-          <p className="mt-2 text-sm leading-7 text-ink-900/65">
+        <section className="rounded-[2rem] border border-ink-900/10 bg-white p-4 shadow-sm sm:p-6">
+          <h2 className="text-xl font-semibold text-ink-950 sm:text-2xl">Checkout</h2>
+          <p className="mt-2 text-sm leading-6 text-ink-900/65 sm:leading-7">
             Save delivery details and create the order in the backend. Payment initiation can follow immediately after this flow in the next phase.
           </p>
           {error ? <div className="mt-4"><AuthMessage tone="error">{error}</AuthMessage></div> : null}
