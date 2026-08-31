@@ -1,0 +1,24 @@
+"use client";
+
+import { ErrorState } from "@/components/error-state";
+
+export default function ProductsError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <ErrorState
+        title="We could not load products right now."
+        description={error.message || "Something went wrong while fetching the catalog from the backend."}
+        retryHref="/products"
+      />
+      <button onClick={reset} className="sr-only" type="button">
+        Retry
+      </button>
+    </div>
+  );
+}
