@@ -1,30 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthFormShell } from "@/components/auth-form-shell";
 import { AuthMessage } from "@/components/auth-message";
 import { submitNewPassword } from "@/lib/backend";
 
+const RESET_TOKEN_STORAGE_KEY = "wecure-reset-token";
+const RESET_EMAIL_STORAGE_KEY = "wecure-reset-email";
+
 export function AuthNewPasswordClient() {
   const router = useRouter();
   const params = useSearchParams();
-  const token = params?.get("token") || "";
+  const queryToken = params?.get("token") || "";
+  const [token, setToken] = useState(queryToken);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (!queryToken) {
+      const storedToken = window.sessionStorage.getItem(RESET_TOKEN_STORAGE_KEY) || "";
+      setToken(storedToken);
+    }
+
+    setEmail(window.sessionStorage.getItem(RESET_EMAIL_STORAGE_KEY) || "");
+  }, [queryToken]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setPending(true);
     setError(null);
     setMessage(null);
+
+    if (password !== confirmPassword) {
+      setPending(false);
+      setError("Passwords do not match.");
+      return;
+    }
+
     try {
       const result = await submitNewPassword(token, password);
+      if (typeof window !== "undefined") {
+        window.sessionStorage.removeItem(RESET_TOKEN_STORAGE_KEY);
+        window.sessionStorage.removeItem(RESET_EMAIL_STORAGE_KEY);
+      }
       setMessage(result.message || "Password updated.");
       router.push("/auth/login");
     } catch (err) {
@@ -44,18 +74,19 @@ export function AuthNewPasswordClient() {
       <AuthFormShell
         eyebrow="Recovery"
         title="Choose a new password"
-        description="Use the token from your email reset link."
+        description={email ? `Create a new password for ${email}.` : "Create a new password for your account."}
         mode="password"
       >
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-ink-900">Reset token</label>
-            <Input value={token} readOnly />
-          </div>
-          <div className="space-y-2">
             <label className="text-sm font-medium text-ink-900">New password</label>
             <Input value={password} onChange={(e) => setPassword(e.target.value)} type="password" autoComplete="new-password" required />
           </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-ink-900">Confirm new password</label>
+            <Input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type="password" autoComplete="new-password" required />
+          </div>
+          {!token ? <AuthMessage tone="error">Please restart the reset flow and verify your OTP first.</AuthMessage> : null}
           {error ? <AuthMessage tone="error">{error}</AuthMessage> : null}
           {message ? <AuthMessage tone="success">{message}</AuthMessage> : null}
           <Button type="submit" disabled={pending || !token}>

@@ -316,6 +316,13 @@ export function requestPasswordReset(email: string) {
   });
 }
 
+export function verifyPasswordResetOtp(email: string, otp: string) {
+  return request<{ token: string }>("/api/v1/auth/reset/verify", {
+    method: "POST",
+    body: JSON.stringify({ email, otp }),
+  });
+}
+
 export function submitNewPassword(token: string, password: string) {
   return request<{ message: string }>("/api/v1/auth/new-password", {
     method: "POST",
