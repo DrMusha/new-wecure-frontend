@@ -90,7 +90,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
         {validProducts.length > 0 ? (
           <>
-            <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-3">
+            <div className="mt-10 grid grid-cols-2 gap-5 md:grid-cols-4">
               {validProducts.map((product, index) => (
                 <ProductCard
                   key={product.id || `product-${index}`}
