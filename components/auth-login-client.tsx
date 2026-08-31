@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BrandMark } from "@/components/brand-mark";
 import { AuthFormShell } from "@/components/auth-form-shell";
 import { AuthMessage } from "@/components/auth-message";
+import { SiteHeader } from "@/components/site-header";
 import { login } from "@/lib/backend";
 import { saveAuthSession } from "@/lib/session";
 
@@ -21,6 +22,15 @@ export function AuthLoginClient() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push("/");
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,8 +57,16 @@ export function AuthLoginClient() {
 
   return (
     <div className="min-h-screen bg-mesh-radial">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
-        <BrandMark href="/" compact />
+      <SiteHeader />
+      <div className="mx-auto max-w-2xl px-4 pt-6 sm:px-6 lg:px-8">
+        <button
+          type="button"
+          onClick={handleBack}
+          aria-label="Go back"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-blue-500 bg-white text-blue-600 shadow-sm transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
       </div>
       <AuthFormShell
         eyebrow="Authentication"

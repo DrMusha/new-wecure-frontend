@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 import { BrandMark } from "@/components/brand-mark";
 import { AuthStatus } from "@/components/auth-status";
 import { CartLink } from "@/components/cart-link";
@@ -12,6 +15,16 @@ const links = [
 ];
 
 export function SiteHeader() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  function closeMobileMenu() {
+    setIsMobileMenuOpen(false);
+  }
+
+  function toggleMobileMenu() {
+    setIsMobileMenuOpen((current) => !current);
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
       <a
@@ -51,30 +64,46 @@ export function SiteHeader() {
           <div className="hidden lg:block">
             <AuthStatus />
           </div>
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white md:hidden">
-            <Menu className="h-4 w-4 text-gray-900" />
-          </div>
+          <button
+            type="button"
+            onClick={toggleMobileMenu}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white transition hover:border-blue-300 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 md:hidden"
+          >
+            {isMobileMenuOpen ? <X className="h-4 w-4 text-current" /> : <Menu className="h-4 w-4 text-current" />}
+          </button>
         </div>
       </div>
-      <div className="border-t border-gray-100 bg-gray-50 md:hidden">
-        <div className="mx-auto max-w-7xl px-4 py-2.5 sm:px-6 lg:px-8">
-          <div className="mb-2 flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500">
-            <span>Browse</span>
-            <span>Swipe</span>
-          </div>
-          <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {links.map((link) => (
+      {isMobileMenuOpen ? (
+        <div id="mobile-navigation" className="border-t border-gray-100 bg-gray-50 md:hidden">
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+            <div className="grid gap-2">
               <Link
-                key={link.href}
-                href={link.href}
-                className="whitespace-nowrap rounded-full border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 sm:px-4 sm:text-sm"
+                href="/search"
+                onClick={closeMobileMenu}
+                className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-800 transition hover:border-blue-300 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
               >
-                {link.label}
+                Search
               </Link>
-            ))}
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={closeMobileMenu}
+                  className="rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:border-blue-300 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-3">
+              <AuthStatus />
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </header>
   );
 }
