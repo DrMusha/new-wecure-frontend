@@ -57,7 +57,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 {category.name}
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-ink-900/70">
-                {category.description || "Live category data from the backend."}
+                {category.description || "Browse products in this category."}
               </p>
             </div>
             <div className="flex items-center justify-center">
@@ -95,7 +95,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
           ) : (
             <div className="mt-8 rounded-[2rem] border border-dashed border-ink-900/15 bg-white p-8 text-sm text-ink-900/70">
-              No products were returned for this category yet.
+              No products are available in this category right now.
             </div>
           )}
         </section>

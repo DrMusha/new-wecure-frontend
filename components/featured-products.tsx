@@ -19,13 +19,13 @@ export function FeaturedProducts() {
               </h2>
             </div>
             <p className="mt-3 text-sm leading-6 text-gray-500 sm:mt-4 sm:text-base sm:leading-7">
-              A hand-picked view of the products people reach for most, pulled straight from the live backend and presented in a cleaner shopping layout.
+              A hand-picked selection of the items customers reach for most.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3 md:max-w-[28rem] lg:max-w-[34rem]">
             {[
-              { title: "Live feed", text: "Backend-synced products" },
-              { title: "Fast browse", text: "Simple card layout" },
+              { title: "Popular now", text: "Customer favorites" },
+              { title: "Easy browse", text: "Quick to scan" },
               { title: "Trusted pick", text: "Featured essentials" },
             ].map((item) => (
               <div key={item.title} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">

@@ -25,7 +25,7 @@ export default function MedicalCardPage() {
           <SectionHeading
             eyebrow="Medical Card"
             title="Your clinical profile and health logs."
-            description="This page now connects to the backend medical card endpoints."
+            description="Keep your health information and logs in one place."
           />
         </div>
         <div className="mt-10">

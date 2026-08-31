@@ -35,7 +35,7 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
     return (
       <SectionMessage
         title="Sign in to view order details"
-        description="We need the backend token to read this order."
+        description="Please sign in to view this order."
       />
     );
   }
@@ -45,7 +45,7 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
   }
 
   if (!order) {
-    return <SectionMessage title="Order not found" description="The backend did not return this order." />;
+    return <SectionMessage title="Order not found" description="We could not find this order." />;
   }
 
   return (

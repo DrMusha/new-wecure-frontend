@@ -27,10 +27,10 @@ export function SiteFooter() {
               WeCure Pharmacy
             </div>
             <h2 className="mt-4 max-w-xl text-2xl font-semibold tracking-tight text-gray-950 sm:mt-5 sm:text-4xl">
-              A cleaner way to shop trusted health essentials in Zambia.
+              A trusted way to shop health essentials in Zambia.
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-500 sm:mt-4 sm:text-base sm:leading-7">
-              Order medicines, cosmetics, baby products, and AgroVet essentials from a live backend-powered storefront designed for speed, trust, and easier checkout.
+              Order medicines, cosmetics, baby products, and AgroVet essentials with a shopping experience designed for speed, trust, and easier checkout.
             </p>
 
             <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap">
@@ -50,7 +50,7 @@ export function SiteFooter() {
 
             <div className="mt-6 grid gap-3 sm:mt-8 sm:grid-cols-3">
               {[
-                { title: "Live backend", text: "Products and orders stay in sync" },
+                { title: "Always updated", text: "Products and orders stay up to date" },
                 { title: "Fast delivery", text: "Built for nationwide reach" },
                 { title: "Secure checkout", text: "Checkout with confidence" },
               ].map((item) => (

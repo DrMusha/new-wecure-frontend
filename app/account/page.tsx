@@ -25,7 +25,7 @@ export default function AccountPage() {
             Your profile and saved account details.
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-500 sm:text-base">
-            This section shows the information saved from your login session, plus quick routes to the parts of WeCure you use most often.
+            This section brings together your profile details and quick routes to the parts of WeCure you use most often.
           </p>
         </div>
 

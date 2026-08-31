@@ -33,7 +33,7 @@ export async function CategoryGrid() {
               </span>
             </div>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
-              Shop by category with a cleaner, more premium browsing flow.
+              Shop by category and find what you need faster.
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-gray-500 sm:text-base">
               Explore the live category feed with a layout that makes the primary category feel featured,
@@ -67,7 +67,7 @@ export async function CategoryGrid() {
                     {leadCategory.name?.trim() || "Untitled category"}
                   </h3>
                   <p className="mt-4 text-sm leading-7 text-gray-600">
-                    {leadCategory.description || "Browse the most relevant category first with a richer card and a calmer visual hierarchy."}
+                    {leadCategory.description || "Start with one of our most popular categories and explore from there."}
                   </p>
                 </div>
 
@@ -136,7 +136,7 @@ export async function CategoryGrid() {
 
                       <div className="flex items-center justify-between gap-3">
                         <p className="max-w-[14rem] text-sm leading-6 text-gray-600">
-                          {category.description || "Live category data from the backend."}
+                          {category.description || "Explore products grouped into easy-to-browse categories."}
                         </p>
                         <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/90 text-blue-600 shadow-sm ring-1 ring-blue-100 transition group-hover:translate-x-0.5">
                           <ArrowRight className="h-4 w-4" />
@@ -149,7 +149,7 @@ export async function CategoryGrid() {
             ) : (
               <div className="sm:col-span-2 lg:col-span-6">
                 <div className="rounded-[2rem] border border-dashed border-blue-200 bg-white/80 p-6 text-sm leading-7 text-gray-500">
-                  No categories were returned yet. Once the backend has category records, they will appear here in this section.
+                  No categories are available right now. Please check back again soon.
                 </div>
               </div>
             )}

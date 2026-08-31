@@ -180,7 +180,7 @@ export function BagClient() {
         <section className="rounded-[2rem] border border-ink-900/10 bg-white p-4 shadow-sm sm:p-6">
           <h2 className="text-xl font-semibold text-ink-950 sm:text-2xl">Checkout</h2>
           <p className="mt-2 text-sm leading-6 text-ink-900/65 sm:leading-7">
-            Save delivery details and create the order in the backend. Payment initiation can follow immediately after this flow in the next phase.
+            Save your delivery details and place your order when you are ready.
           </p>
           {error ? <div className="mt-4"><AuthMessage tone="error">{error}</AuthMessage></div> : null}
           {message ? <div className="mt-4"><AuthMessage tone="success">{message}</AuthMessage></div> : null}

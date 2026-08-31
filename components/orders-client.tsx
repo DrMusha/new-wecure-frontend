@@ -59,7 +59,7 @@ export function OrdersClient() {
     return (
       <SectionMessage
         title="Sign in to view your orders"
-        description="Orders are protected by the backend token, so we need an authenticated session first."
+        description="Please sign in to view your orders."
       />
     );
   }

@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: ProductPageProps) {
     const product = await getProduct(id);
     return {
       title: `${product.name} | WeCure`,
-      description: product.description || "Product details from the WeCure backend.",
+      description: product.description || "Product details from WeCure Pharmacy.",
     };
   } catch {
     return {
@@ -126,7 +126,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     <ShieldCheck className="h-4 w-4" />
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Source</p>
                   </div>
-                  <p className="mt-2 text-sm font-semibold text-ink-950">Live backend feed</p>
+                  <p className="mt-2 text-sm font-semibold text-ink-950">Trusted listing</p>
                 </div>
               </div>
 

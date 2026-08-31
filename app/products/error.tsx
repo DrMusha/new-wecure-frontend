@@ -13,7 +13,7 @@ export default function ProductsError({
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <ErrorState
         title="We could not load products right now."
-        description={error.message || "Something went wrong while fetching the catalog from the backend."}
+        description={error.message || "Something went wrong while loading the catalog."}
         retryHref="/products"
       />
       <button onClick={reset} className="sr-only" type="button">

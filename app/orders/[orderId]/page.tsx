@@ -18,7 +18,7 @@ export default async function OrderDetailPage({
         <SectionHeading
           eyebrow="Order"
           title="Order details"
-          description="A live view of the selected order from the backend."
+          description="Review the status, items, and payment details for this order."
         />
         <div className="mt-10 space-y-8">
           <OrderDetailClient orderId={orderId} />

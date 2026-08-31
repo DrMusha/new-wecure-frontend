@@ -46,7 +46,7 @@ export function ProductCard({ product, categoryName }: ProductCardProps) {
         </div>
 
         <p className="hidden line-clamp-2 text-xs leading-5 text-gray-500 sm:block sm:text-sm sm:leading-6">
-          {product.description || "Genuine product available through the WeCure backend."}
+          {product.description || "Genuine product available from WeCure Pharmacy."}
         </p>
 
         <Link

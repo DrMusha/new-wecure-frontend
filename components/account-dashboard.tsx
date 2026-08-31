@@ -101,7 +101,7 @@ export function AccountDashboard() {
                 {user.name || "WeCure customer"}
               </h2>
               <p className="mt-2 text-sm leading-6 text-gray-500 sm:leading-7">
-                Your profile information is stored from the login session and ready to use across checkout, orders, and your medical card.
+                Your profile information is ready to use across checkout, orders, and your medical card.
               </p>
             </div>
           </div>
@@ -156,7 +156,7 @@ export function AccountDashboard() {
                   Access token
                 </p>
                 <p className="mt-1 font-semibold text-gray-950">
-                  {token ? "Stored locally for authenticated requests" : "No token found"}
+                  {token ? "Ready for secure access" : "No token found"}
                 </p>
               </div>
             </div>

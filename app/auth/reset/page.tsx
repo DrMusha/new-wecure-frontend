@@ -39,7 +39,7 @@ export default function ResetPage() {
       <AuthFormShell
         eyebrow="Recovery"
         title="Reset your password"
-        description="We’ll email you a reset link from the backend."
+        description="We'll email you a reset link to help you sign back in."
         mode="reset"
       >
         <form className="space-y-4" onSubmit={handleSubmit}>

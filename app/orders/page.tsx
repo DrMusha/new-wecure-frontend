@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/section-heading";
 
 export const metadata = {
   title: "Orders | WeCure",
-  description: "View your backend-backed order history.",
+  description: "View your order history.",
 };
 
 export default function OrdersPage() {
@@ -25,7 +25,7 @@ export default function OrdersPage() {
           <SectionHeading
             eyebrow="Orders"
             title="Track your recent orders."
-            description="Orders are fetched from the Go backend using your stored access token."
+            description="See your recent orders and track what you have placed."
           />
         </div>
         <div className="mt-10">

@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/section-heading";
 
 export const metadata = {
   title: "Bag | WeCure",
-  description: "Review your bag and place an order through the WeCure backend.",
+  description: "Review your bag and place your order.",
 };
 
 export default function BagPage() {
@@ -19,7 +19,7 @@ export default function BagPage() {
         <SectionHeading
           eyebrow="Bag"
           title="Review your items and complete checkout."
-          description="Delivery details are saved to the backend before the order is created."
+          description="Add your delivery details before placing your order."
         />
         <div className="mt-10">
           <BagClient />

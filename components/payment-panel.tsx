@@ -164,7 +164,7 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
     return (
       <SectionMessage
         title="Sign in to pay for this order"
-        description="Payment creation is protected by the backend session token."
+        description="Please sign in to start and track your payment."
       />
     );
   }

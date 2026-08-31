@@ -155,7 +155,7 @@ export function MedicalCardClient() {
     return (
       <SectionMessage
         title="Sign in to use the medical card"
-        description="Medical card data is tied to your authenticated backend session."
+        description="Please sign in to access your medical card information."
       />
     );
   }

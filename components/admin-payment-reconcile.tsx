@@ -62,7 +62,7 @@ export function AdminPaymentReconcile() {
     return (
       <SectionMessage
         title="Sign in to access admin payment tools"
-        description="The reconciliation endpoint is protected by the backend bearer token."
+        description="Please sign in to access payment reconciliation tools."
       />
     );
   }
@@ -71,7 +71,7 @@ export function AdminPaymentReconcile() {
     return (
       <SectionMessage
         title="Admin access required"
-        description="Your current account does not have permission to use the payment reconciliation endpoint."
+        description="Your current account does not have permission to use payment reconciliation tools."
       />
     );
   }
@@ -83,7 +83,7 @@ export function AdminPaymentReconcile() {
       </p>
       <h2 className="mt-2 text-2xl font-semibold text-ink-950">Queue payment reconciliation</h2>
       <p className="mt-2 text-sm leading-7 text-ink-900/60">
-        Use one of these identifiers to ask the backend worker to sync with the provider.
+        Use one of these identifiers to sync a payment with the provider.
       </p>
 
       {error ? <div className="mt-4"><AuthMessage tone="error">{error}</AuthMessage></div> : null}

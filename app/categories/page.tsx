@@ -9,7 +9,7 @@ import { listCategories, listProducts } from "@/lib/backend";
 
 export const metadata = {
   title: "Categories | WeCure",
-  description: "Browse live categories from the WeCure backend.",
+  description: "Browse product categories from WeCure Pharmacy.",
 };
 
 export default async function CategoriesPage() {
@@ -32,8 +32,8 @@ export default async function CategoriesPage() {
 
         <SectionHeading
           eyebrow="Categories"
-          title="Browse the live category feed."
-          description="This page now reflects the backend content model and can be expanded into category landing pages later."
+          title="Browse categories for every need."
+          description="Explore product categories to find medicines, wellness essentials, and more."
         />
 
         {counts.length > 0 ? (
@@ -59,7 +59,7 @@ export default async function CategoriesPage() {
                   </p>
                   <h3 className="mt-2 text-lg font-semibold text-ink-950">{category.name || "Untitled category"}</h3>
                   <p className="mt-2 text-sm leading-6 text-ink-900/65">
-                    {category.description || "Category data is now coming from the backend."}
+                    {category.description || "Discover products grouped into a category that fits your needs."}
                   </p>
                 </div>
               </Link>
@@ -67,7 +67,7 @@ export default async function CategoriesPage() {
           </div>
         ) : (
           <div className="mt-10 rounded-[2rem] border border-dashed border-ink-900/10 bg-white p-8 text-sm text-ink-900/60">
-            No categories were returned yet. The layout is ready for the live backend data.
+            No categories are available right now. Please check back again soon.
           </div>
         )}
       </main>

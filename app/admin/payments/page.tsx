@@ -5,7 +5,7 @@ import { AdminPaymentReconcile } from "@/components/admin-payment-reconcile";
 
 export const metadata = {
   title: "Admin Payments | WeCure",
-  description: "Reconcile and sync payments from the backend worker queue.",
+  description: "Review and reconcile payment updates.",
 };
 
 export default function AdminPaymentsPage() {

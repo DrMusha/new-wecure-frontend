@@ -9,7 +9,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const metadata = {
   title: "Products | WeCure",
-  description: "Browse live products from the WeCure backend.",
+  description: "Browse products from WeCure Pharmacy.",
 };
 
 const PAGE_SIZE = 12;
@@ -69,8 +69,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
         <SectionHeading
           eyebrow="Catalog"
-          title="Shop from the live product feed."
-          description="These products are now pulled from the Go backend and rendered with a cleaner shopping layout."
+          title="Shop trusted health essentials."
+          description="Explore medicines, wellness products, and everyday essentials in one place."
         />
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -90,7 +90,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
         {validProducts.length > 0 ? (
           <>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-3">
               {validProducts.map((product, index) => (
                 <ProductCard
                   key={product.id || `product-${index}`}
@@ -100,48 +100,50 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col gap-3 rounded-[2rem] border border-ink-900/10 bg-white/90 px-5 py-4 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-ink-900/70">
+            <div className="mt-8 flex flex-col gap-3 rounded-[1.5rem] border border-ink-900/10 bg-white/90 px-4 py-4 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] sm:rounded-[2rem] sm:px-5 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm leading-6 text-ink-900/70">
                 Showing {startItem}-{endItem} of {productPage.total} products
               </p>
-              <div className="flex items-center gap-2">
-                {hasPreviousPage ? (
-                  <Link
-                    href={buildPageHref(activePage - 1)}
-                    className="inline-flex items-center gap-2 rounded-full border border-ink-900/10 bg-white px-4 py-2 text-sm font-semibold text-ink-900 transition hover:border-brand-300 hover:text-brand-600"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    Previous
-                  </Link>
-                ) : (
-                  <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
-                    <ChevronLeft className="h-4 w-4" />
-                    Previous
-                  </span>
-                )}
-                <p className="px-2 text-sm font-medium text-ink-900/70">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
+                <p className="order-first text-center text-sm font-medium text-ink-900/70 sm:order-none sm:px-2">
                   Page {activePage} of {totalPages}
                 </p>
-                {hasNextPage ? (
-                  <Link
-                    href={buildPageHref(activePage + 1)}
-                    className="inline-flex items-center gap-2 rounded-full border border-ink-900/10 bg-white px-4 py-2 text-sm font-semibold text-ink-900 transition hover:border-brand-300 hover:text-brand-600"
-                  >
-                    Next
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
-                ) : (
-                  <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
-                    Next
-                    <ChevronRight className="h-4 w-4" />
-                  </span>
-                )}
+                <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+                  {hasPreviousPage ? (
+                    <Link
+                      href={buildPageHref(activePage - 1)}
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-ink-900/10 bg-white px-3 py-2 text-sm font-semibold text-ink-900 transition hover:border-brand-300 hover:text-brand-600 sm:px-4"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      Previous
+                    </Link>
+                  ) : (
+                    <span className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-400 sm:px-4">
+                      <ChevronLeft className="h-4 w-4" />
+                      Previous
+                    </span>
+                  )}
+                  {hasNextPage ? (
+                    <Link
+                      href={buildPageHref(activePage + 1)}
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-ink-900/10 bg-white px-3 py-2 text-sm font-semibold text-ink-900 transition hover:border-brand-300 hover:text-brand-600 sm:px-4"
+                    >
+                      Next
+                      <ChevronRight className="h-4 w-4" />
+                    </Link>
+                  ) : (
+                    <span className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-400 sm:px-4">
+                      Next
+                      <ChevronRight className="h-4 w-4" />
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </>
         ) : (
           <div className="mt-10 rounded-[2rem] border border-dashed border-ink-900/10 bg-white p-8 text-sm text-ink-900/60">
-            No products are available yet. Once the backend has published items, they will appear here automatically.
+            No products are available right now. Please check back again soon.
           </div>
         )}
       </main>
