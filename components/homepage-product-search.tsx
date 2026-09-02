@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import { getProductSuggestions, type ProductSuggestion } from "@/lib/backend";
 
 const MIN_SEARCH_LENGTH = 2;
+const MAX_SUGGESTIONS = 10;
 
 export function HomepageProductSearch() {
   const [query, setQuery] = useState("");
@@ -24,7 +25,7 @@ export function HomepageProductSearch() {
     const timeout = window.setTimeout(async () => {
       setIsLoading(true);
       try {
-        const results = await getProductSuggestions(term);
+        const results = await getProductSuggestions(term, MAX_SUGGESTIONS);
         if (isCurrent) setSuggestions(results);
       } catch {
         if (isCurrent) setSuggestions([]);
@@ -52,7 +53,7 @@ export function HomepageProductSearch() {
         <button type="submit" className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:rounded-xl sm:px-5">Search</button>
       </div>
       {query.trim().length >= MIN_SEARCH_LENGTH ? (
-        <div id="homepage-search-suggestions" role="listbox" className="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border border-gray-200 bg-white p-1.5 shadow-xl sm:rounded-2xl">
+        <div id="homepage-search-suggestions" role="listbox" className="absolute z-20 mt-2 max-h-80 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white p-1.5 shadow-xl sm:rounded-2xl">
           {isLoading ? <p className="px-3 py-2 text-sm text-gray-500">Searching products...</p> : null}
           {!isLoading && suggestions.length === 0 ? <p className="px-3 py-2 text-sm text-gray-500">No matching products found.</p> : null}
           {!isLoading ? suggestions.map((product) => (
