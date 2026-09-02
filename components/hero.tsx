@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { HomepageProductSearch } from "@/components/homepage-product-search";
 
 export function Hero() {
   return (
@@ -20,6 +21,8 @@ export function Hero() {
                 <p className="mt-4 max-w-xl text-sm leading-7 text-gray-500 sm:mt-6 sm:text-lg sm:leading-8">
                   Zambia's No. 1 online pharmacy, WeCure Pharmacy, is ready to deliver your Medications, Cosmetics, Baby Products and AgroVet Products right to your doorstep.
                 </p>
+
+                <HomepageProductSearch />
 
                 <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
                   <Link

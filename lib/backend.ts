@@ -253,6 +253,12 @@ export type Product = {
   updatedAt?: string;
 };
 
+export type ProductSuggestion = {
+  id: string;
+  name: string;
+  images?: string[];
+  isFeatured?: boolean;
+};
 export type ProductPage = {
   items: Product[];
   page: number;
@@ -285,6 +291,21 @@ export function listProductsPage(params?: Record<string, string | number | boole
   }
   const query = searchParams.toString();
   return request<unknown>(`/api/v1/products${query ? `?${query}` : ""}`).then(normalizeProductPage);
+}
+
+export function getProductSuggestions(query: string, limit = 6) {
+  const params = new URLSearchParams({ q: query, limit: String(limit) });
+  return request<ProductSuggestion[]>(`/api/v1/products/suggestions?${params}`).then((items) =>
+    arrayValue(items).map((item) => {
+      const record = rawRecord(item);
+      return {
+        id: stringValue(readField(record, "id", "ID")),
+        name: stringValue(readField(record, "name", "Name")),
+        images: arrayValue(readField(record, "images", "Images")).map(stringValue).filter(Boolean),
+        isFeatured: booleanValue(readField(record, "isFeatured", "IsFeatured")),
+      };
+    }).filter((item) => item.id && item.name),
+  );
 }
 
 export function getCategory(id: string) {

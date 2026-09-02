@@ -17,8 +17,13 @@ const PAGE_SIZE = 12;
 type ProductsPageProps = {
   searchParams?: Promise<{
     page?: string | string[];
+    search?: string | string[];
   }>;
 };
+
+function getSearchParam(value: string | string[] | undefined) {
+  return (Array.isArray(value) ? value[0] : value)?.trim() || "";
+}
 
 function getPage(value: string | string[] | undefined) {
   const raw = Array.isArray(value) ? value[0] : value;
@@ -26,10 +31,13 @@ function getPage(value: string | string[] | undefined) {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
 }
 
-function buildPageHref(page: number) {
+function buildPageHref(page: number, search: string) {
   const params = new URLSearchParams();
   if (page > 1) {
     params.set("page", String(page));
+  }
+  if (search) {
+    params.set("search", search);
   }
   const query = params.toString();
   return `/products${query ? `?${query}` : ""}`;
@@ -38,8 +46,9 @@ function buildPageHref(page: number) {
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const resolvedSearchParams = await searchParams;
   const currentPage = getPage(resolvedSearchParams?.page);
+  const search = getSearchParam(resolvedSearchParams?.search);
   const [productPage, categories] = await Promise.all([
-    listProductsPage({ status: "published", page: currentPage, pageSize: PAGE_SIZE }).catch(() => ({
+    listProductsPage({ status: "published", search, page: currentPage, pageSize: PAGE_SIZE }).catch(() => ({
       items: [],
       page: currentPage,
       pageSize: PAGE_SIZE,
@@ -69,8 +78,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
         <SectionHeading
           eyebrow="Catalog"
-          title="Shop trusted health essentials."
-          description="Explore medicines, wellness products, and everyday essentials in one place."
+          title={search ? `Results for "${search}"` : "Shop trusted health essentials."}
+          description={search ? "Browse products that match your search." : "Explore medicines, wellness products, and everyday essentials in one place."}
         />
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -111,7 +120,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
                   {hasPreviousPage ? (
                     <Link
-                      href={buildPageHref(activePage - 1)}
+                      href={buildPageHref(activePage - 1, search)}
                       className="inline-flex items-center justify-center gap-2 rounded-full border border-ink-900/10 bg-white px-3 py-2 text-sm font-semibold text-ink-900 transition hover:border-brand-300 hover:text-brand-600 sm:px-4"
                     >
                       <ChevronLeft className="h-4 w-4" />
@@ -125,7 +134,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                   )}
                   {hasNextPage ? (
                     <Link
-                      href={buildPageHref(activePage + 1)}
+                      href={buildPageHref(activePage + 1, search)}
                       className="inline-flex items-center justify-center gap-2 rounded-full border border-ink-900/10 bg-white px-3 py-2 text-sm font-semibold text-ink-900 transition hover:border-brand-300 hover:text-brand-600 sm:px-4"
                     >
                       Next
