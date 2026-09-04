@@ -21,7 +21,17 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
   }, []);
 
   useEffect(() => {
-    useEffect(() => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    getOrder(token, orderId)
+      .then(setOrder)
+      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load order."))
+      .finally(() => setLoading(false));
+  }, [token, orderId]);
+
+  useEffect(() => {
     if (!token) return;
 
     const refreshOrderAfterPayment = (event: Event) => {
@@ -33,15 +43,6 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
     window.addEventListener("wecure:payment-status", refreshOrderAfterPayment);
     return () => window.removeEventListener("wecure:payment-status", refreshOrderAfterPayment);
   }, [orderId, token]);
-  if (!token) {
-      setLoading(false);
-      return;
-    }
-    getOrder(token, orderId)
-      .then(setOrder)
-      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load order."))
-      .finally(() => setLoading(false));
-  }, [token, orderId]);
 
   if (!token) {
     return (
@@ -76,7 +77,9 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
       <section className="rounded-[2rem] border border-ink-900/10 bg-white p-6 shadow-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">Payment status</p>
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-          <span className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${paymentStatusClass(order.payment?.status)}`}>{formatPaymentStatus(order.payment?.status)}</span>
+          <span className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${paymentStatusClass(order.payment?.status)}`}>
+            {formatPaymentStatus(order.payment?.status)}
+          </span>
           {order.payment?.referenceId ? (
             <p className="text-sm text-ink-900/60">Reference: {order.payment.referenceId}</p>
           ) : null}
@@ -85,6 +88,7 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
           <p className="mt-2 text-sm text-ink-900/60">Provider: {order.payment.provider}</p>
         ) : null}
       </section>
+
       <section className="rounded-[2rem] border border-ink-900/10 bg-white p-6 shadow-sm">
         <h2 className="text-xl font-semibold text-ink-950">Items</h2>
         <div className="mt-4 space-y-3">
@@ -107,6 +111,7 @@ function formatPaymentStatus(status?: string) {
   const value = (status || "not started").replace(/_/g, " ");
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
+
 function paymentStatusClass(status?: string) {
   switch (status) {
     case "successful":
