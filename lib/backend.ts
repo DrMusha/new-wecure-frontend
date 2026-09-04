@@ -603,3 +603,57 @@ function normalizeProduct(payload: unknown): Product {
     updatedAt: stringValue(readField(record, "updatedAt", "UpdatedAt")) || undefined,
   };
 }
+
+export function subscribeToPaymentStatus(
+  token: string,
+  paymentId: string,
+  onPayment: (payment: Payment) => void,
+  onError: (error: Error) => void,
+) {
+  const controller = new AbortController();
+
+  void (async () => {
+    try {
+      const response = await fetch(`${getApiBaseUrl()}/api/v1/payments/${paymentId}/events`, {
+        headers: { Accept: "text/event-stream", Authorization: `Bearer ${token}` },
+        cache: "no-store",
+        signal: controller.signal,
+      });
+      if (!response.ok || !response.body) {
+        throw new Error(`Could not connect to payment status updates (${response.status}).`);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let receivedTerminalStatus = false;
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const events = buffer.split("\n\n");
+        buffer = events.pop() || "";
+        for (const event of events) {
+          const data = event.split("\n").find((line) => line.startsWith("data: "));
+          if (!data) continue;
+          try {
+            const payment = JSON.parse(data.slice(6)) as Payment;
+            receivedTerminalStatus = payment.status === "successful" || payment.status === "failed";
+            onPayment(payment);
+          } catch {
+            // Ignore malformed events and continue waiting for the next status.
+          }
+        }
+      }
+      if (!controller.signal.aborted && !receivedTerminalStatus) {
+        throw new Error("Payment status connection closed. Refresh the status and try again.");
+      }
+    } catch (error) {
+      if (!controller.signal.aborted) {
+        onError(error instanceof Error ? error : new Error("Payment status stream disconnected."));
+      }
+    }
+  })();
+
+  return () => controller.abort();
+}

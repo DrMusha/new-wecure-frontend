@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthMessage } from "@/components/auth-message";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import {
   createPayment,
   getDeliveryDetails,
   getPaymentsForOrder,
+  subscribeToPaymentStatus,
   type DeliveryDetails,
   type Payment,
 } from "@/lib/backend";
@@ -65,6 +66,8 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const stopStatusStream = useRef<(() => void) | null>(null);
+  const activePaymentID = useRef<string | null>(null);
 
   useEffect(() => {
     const nextToken = getAuthToken();
@@ -105,6 +108,50 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
 
   const latestPayment = useMemo(() => payments[0] || null, [payments]);
 
+
+  useEffect(() => () => {
+    stopStatusStream.current?.();
+    activePaymentID.current = null;
+  }, []);
+
+  function trackPayment(payment: Payment) {
+    if (!token || activePaymentID.current === payment.id) return;
+    stopStatusStream.current?.();
+    activePaymentID.current = payment.id;
+    stopStatusStream.current = subscribeToPaymentStatus(
+      token,
+      payment.id,
+      (updated) => {
+        setPayments((previous) => [updated, ...previous.filter((item) => item.id !== updated.id)]);
+        window.dispatchEvent(new CustomEvent("wecure:payment-status", {
+          detail: { orderId, payment: updated },
+        }));
+        if (updated.status === "successful") {
+          activePaymentID.current = null;
+          setPending(false);
+          setMessage("Payment successful. Your order is now being processed.");
+          router.refresh();
+        } else if (updated.status === "failed") {
+          activePaymentID.current = null;
+          setPending(false);
+          setError(updated.failureMessage || "Payment failed. Please check your details and try again.");
+        } else {
+          setMessage("Payment request sent. Waiting for confirmation…");
+        }
+      },
+      (streamError) => {
+        setPending(false);
+        setError(streamError.message);
+      },
+    );
+  }
+
+  useEffect(() => {
+    if (!latestPayment || !token) return;
+    if (latestPayment.status === "initiated" || latestPayment.status === "pending") {
+      trackPayment(latestPayment);
+    }
+  }, [latestPayment?.id, latestPayment?.status, token]);
   async function refreshPayments() {
     if (!token) return;
     setRefreshing(true);
@@ -112,6 +159,12 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
     try {
       const paymentList = await getPaymentsForOrder(token, orderId);
       setPayments(paymentList);
+      const pendingPayment = paymentList.find((payment) =>
+        payment.status === "initiated" || payment.status === "pending",
+      );
+      if (pendingPayment) {
+        trackPayment(pendingPayment);
+      }
       setMessage("Payment status refreshed.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not refresh payments.");
@@ -152,11 +205,10 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
       });
       setMessage(`Payment ${payment.referenceId || payment.id} initiated.`);
       setPayments((prev) => [payment, ...prev.filter((item) => item.id !== payment.id)]);
-      router.refresh();
+      trackPayment(payment);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Payment initiation failed.");
-    } finally {
       setPending(false);
+      setError(err instanceof Error ? err.message : "Payment initiation failed.");
     }
   }
 
@@ -189,7 +241,7 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
               Latest status: <span className="font-semibold">{latestPayment.status || "initiated"}</span>
             </div>
           ) : null}
-          <Button type="button" variant="secondary" onClick={refreshPayments} disabled={refreshing}>
+          <Button type="button" variant="secondary" onClick={refreshPayments} disabled={refreshing || pending}>
             {refreshing ? "Refreshing..." : "Refresh status"}
           </Button>
         </div>
@@ -198,6 +250,13 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
       {error ? <div className="mt-4"><AuthMessage tone="error">{error}</AuthMessage></div> : null}
       {message ? <div className="mt-4"><AuthMessage tone="success">{message}</AuthMessage></div> : null}
 
+
+      {pending ? (
+        <div className="mt-4 flex items-center gap-3 rounded-2xl bg-brand-50 px-4 py-3 text-sm text-brand-800" role="status">
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-brand-600 border-t-transparent" aria-hidden="true" />
+          Confirming your payment. Please do not close this page.
+        </div>
+      ) : null}
       <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">

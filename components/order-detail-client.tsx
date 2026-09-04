@@ -21,7 +21,19 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
   }, []);
 
   useEffect(() => {
-    if (!token) {
+    useEffect(() => {
+    if (!token) return;
+
+    const refreshOrderAfterPayment = (event: Event) => {
+      const detail = (event as CustomEvent<{ orderId?: string }>).detail;
+      if (detail?.orderId !== orderId) return;
+      getOrder(token, orderId).then(setOrder).catch(() => undefined);
+    };
+
+    window.addEventListener("wecure:payment-status", refreshOrderAfterPayment);
+    return () => window.removeEventListener("wecure:payment-status", refreshOrderAfterPayment);
+  }, [orderId, token]);
+  if (!token) {
       setLoading(false);
       return;
     }
@@ -62,6 +74,18 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
       </section>
 
       <section className="rounded-[2rem] border border-ink-900/10 bg-white p-6 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">Payment status</p>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          <span className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${paymentStatusClass(order.payment?.status)}`}>{formatPaymentStatus(order.payment?.status)}</span>
+          {order.payment?.referenceId ? (
+            <p className="text-sm text-ink-900/60">Reference: {order.payment.referenceId}</p>
+          ) : null}
+        </div>
+        {order.payment?.provider ? (
+          <p className="mt-2 text-sm text-ink-900/60">Provider: {order.payment.provider}</p>
+        ) : null}
+      </section>
+      <section className="rounded-[2rem] border border-ink-900/10 bg-white p-6 shadow-sm">
         <h2 className="text-xl font-semibold text-ink-950">Items</h2>
         <div className="mt-4 space-y-3">
           {order.items?.map((item) => (
@@ -77,4 +101,22 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
       </section>
     </div>
   );
+}
+
+function formatPaymentStatus(status?: string) {
+  const value = (status || "not started").replace(/_/g, " ");
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+function paymentStatusClass(status?: string) {
+  switch (status) {
+    case "successful":
+      return "bg-emerald-50 text-emerald-700";
+    case "failed":
+      return "bg-rose-50 text-rose-700";
+    case "initiated":
+    case "pending":
+      return "bg-amber-50 text-amber-700";
+    default:
+      return "bg-slate-100 text-slate-700";
+  }
 }

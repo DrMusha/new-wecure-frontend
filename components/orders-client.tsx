@@ -101,6 +101,7 @@ export function OrdersClient() {
               <tr className="text-left text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
                 <th className="px-5 py-4">Order</th>
                 <th className="px-5 py-4">Status</th>
+                <th className="px-5 py-4">Payment</th>
                 <th className="px-5 py-4">Items</th>
                 <th className="px-5 py-4">Amount</th>
                 <th className="px-5 py-4">Date</th>
@@ -117,6 +118,11 @@ export function OrdersClient() {
                   <td className="px-5 py-4">
                     <span className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
                       {formatStatus(order.status)}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4">
+                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${paymentStatusClass(order.payment?.status)}`}>
+                      {formatPaymentStatus(order.payment?.status)}
                     </span>
                   </td>
                   <td className="px-5 py-4 text-sm text-ink-900/70">{order.items?.length || 0} items</td>
@@ -178,4 +184,22 @@ export function OrdersClient() {
       </div>
     </div>
   );
+}
+
+function formatPaymentStatus(status?: string) {
+  if (!status) return "Not started";
+  return formatStatus(status);
+}
+function paymentStatusClass(status?: string) {
+  switch (status) {
+    case "successful":
+      return "bg-emerald-50 text-emerald-700";
+    case "failed":
+      return "bg-rose-50 text-rose-700";
+    case "initiated":
+    case "pending":
+      return "bg-amber-50 text-amber-700";
+    default:
+      return "bg-slate-100 text-slate-700";
+  }
 }
