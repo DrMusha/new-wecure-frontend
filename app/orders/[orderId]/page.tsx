@@ -1,7 +1,6 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { OrderDetailClient } from "@/components/order-detail-client";
-import { PaymentPanel } from "@/components/payment-panel";
 import { SectionHeading } from "@/components/section-heading";
 
 export default async function OrderDetailPage({
@@ -22,7 +21,6 @@ export default async function OrderDetailPage({
         />
         <div className="mt-10 space-y-8">
           <OrderDetailClient orderId={orderId} />
-          <PaymentPanel orderId={orderId} />
         </div>
       </main>
       <SiteFooter />

@@ -102,7 +102,7 @@ export function BagClient() {
       clearCart();
       setCart([]);
       setMessage(`Order ${order.orderNumber || order.id} created successfully.`);
-      router.push(`/orders/${order.id}`);
+      router.push(`/checkout/${order.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Checkout failed.");
     } finally {
