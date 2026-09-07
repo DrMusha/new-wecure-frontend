@@ -10,6 +10,7 @@ import {
   getDeliveryDetails,
   getPaymentsForOrder,
   subscribeToPaymentStatus,
+  queuePaymentSync,
   type DeliveryDetails,
   type Payment,
 } from "@/lib/backend";
@@ -109,11 +110,6 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
   const latestPayment = useMemo(() => payments[0] || null, [payments]);
 
 
-  useEffect(() => () => {
-    stopStatusStream.current?.();
-    activePaymentID.current = null;
-  }, []);
-
   function trackPayment(payment: Payment) {
     if (!token || activePaymentID.current === payment.id) return;
     stopStatusStream.current?.();
@@ -122,6 +118,7 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
       token,
       payment.id,
       (updated) => {
+        setError(null);
         setPayments((previous) => [updated, ...previous.filter((item) => item.id !== updated.id)]);
         window.dispatchEvent(new CustomEvent("wecure:payment-status", {
           detail: { orderId, payment: updated },
@@ -140,7 +137,6 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
         }
       },
       (streamError) => {
-        setPending(false);
         setError(streamError.message);
       },
     );
@@ -151,6 +147,10 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
     if (latestPayment.status === "initiated" || latestPayment.status === "pending") {
       trackPayment(latestPayment);
     }
+    return () => {
+      stopStatusStream.current?.();
+      activePaymentID.current = null;
+    };
   }, [latestPayment?.id, latestPayment?.status, token]);
   async function refreshPayments() {
     if (!token) return;
@@ -163,6 +163,9 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
         payment.status === "initiated" || payment.status === "pending",
       );
       if (pendingPayment) {
+        await queuePaymentSync(token, pendingPayment.id);
+        stopStatusStream.current?.();
+        activePaymentID.current = null;
         trackPayment(pendingPayment);
       }
       setMessage("Payment status refreshed.");

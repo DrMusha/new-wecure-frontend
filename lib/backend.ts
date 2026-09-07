@@ -604,6 +604,10 @@ function normalizeProduct(payload: unknown): Product {
   };
 }
 
+export function queuePaymentSync(token: string, paymentId: string) {
+  return request<{ queued: boolean }>(`/api/v1/payments/${paymentId}/sync`, { token });
+}
+
 export function subscribeToPaymentStatus(
   token: string,
   paymentId: string,
@@ -611,49 +615,69 @@ export function subscribeToPaymentStatus(
   onError: (error: Error) => void,
 ) {
   const controller = new AbortController();
-
-  void (async () => {
+  let terminal = false;
+  let polling = false;
+  let retryTimer: ReturnType<typeof setTimeout> | undefined;
+  let pollTimer: ReturnType<typeof setInterval> | undefined;
+  const stop = () => {
+    controller.abort();
+    clearTimeout(retryTimer);
+    clearInterval(pollTimer);
+  };
+  const receive = (payment: Payment) => {
+    if (controller.signal.aborted || terminal) return;
+    terminal = payment.status === "successful" || payment.status === "failed";
+    onPayment(payment);
+    if (terminal) stop();
+  };
+  const poll = async () => {
+    if (polling || controller.signal.aborted) return;
+    polling = true;
+    try {
+      const payment = await request<Payment>(`/api/v1/payments/${paymentId}`, {
+        token,
+        signal: AbortSignal.any([controller.signal, AbortSignal.timeout(10000)]),
+      });
+      receive(payment);
+    } catch (error) {
+      if (!controller.signal.aborted) onError(error instanceof Error ? error : new Error("Could not refresh payment status."));
+    } finally { polling = false; }
+  };
+  const connect = async () => {
     try {
       const response = await fetch(`${getApiBaseUrl()}/api/v1/payments/${paymentId}/events`, {
         headers: { Accept: "text/event-stream", Authorization: `Bearer ${token}` },
         cache: "no-store",
         signal: controller.signal,
       });
-      if (!response.ok || !response.body) {
-        throw new Error(`Could not connect to payment status updates (${response.status}).`);
-      }
-
+      if (!response.ok || !response.body) throw new Error(`Could not connect to payment status updates (${response.status}).`);
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
-      let receivedTerminalStatus = false;
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const events = buffer.split("\n\n");
-        buffer = events.pop() || "";
-        for (const event of events) {
-          const data = event.split("\n").find((line) => line.startsWith("data: "));
-          if (!data) continue;
-          try {
-            const payment = JSON.parse(data.slice(6)) as Payment;
-            receivedTerminalStatus = payment.status === "successful" || payment.status === "failed";
-            onPayment(payment);
-          } catch {
-            // Ignore malformed events and continue waiting for the next status.
+      try {
+        while (!controller.signal.aborted) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const events = buffer.split(/\r?\n\r?\n/);
+          buffer = events.pop() || "";
+          for (const event of events) {
+            const data = event.split(/\r?\n/).find((line) => line.startsWith("data: "));
+            if (!data) continue;
+            let payment: Payment;
+            try { payment = JSON.parse(data.slice(6)) as Payment; } catch { continue; }
+            receive(payment);
           }
         }
-      }
-      if (!controller.signal.aborted && !receivedTerminalStatus) {
-        throw new Error("Payment status connection closed. Refresh the status and try again.");
-      }
-    } catch (error) {
-      if (!controller.signal.aborted) {
-        onError(error instanceof Error ? error : new Error("Payment status stream disconnected."));
-      }
+      } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
+    } catch {
+      // The database fallback continues during stream outages.
+    } finally {
+      if (!controller.signal.aborted) retryTimer = setTimeout(() => { void connect(); }, 3000);
     }
-  })();
-
-  return () => controller.abort();
+  };
+  pollTimer = setInterval(() => { void poll(); }, 15000);
+  void poll();
+  void connect();
+  return stop;
 }
