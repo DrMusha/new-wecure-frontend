@@ -1,11 +1,10 @@
-import { SectionHeading } from "@/components/section-heading";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { PageBreadcrumbs } from "@/components/page-breadcrumbs";
 import { ProductCard } from "@/components/product-card";
 import { listCategories, listProductsPage } from "@/lib/backend";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
 import { ProductSearch } from "@/components/product-search";
 
 export const metadata = {
@@ -46,6 +45,11 @@ function buildPageHref(page: number, search: string, categoryId: string) {
   return `/products${query ? `?${query}` : ""}`;
 }
 
+function visiblePages(current: number, total: number) {
+  const pages = new Set([1, total, current - 1, current, current + 1]);
+  return [...pages].filter((page) => page >= 1 && page <= total).sort((a, b) => a - b);
+}
+
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const resolvedSearchParams = await searchParams;
   const currentPage = getPage(resolvedSearchParams?.page);
@@ -67,6 +71,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const categoryMap = new Map(
     validCategories.map((category) => [category.id, category.name]),
   );
+  const activeCategory = validCategories.find((category) => category.id === categoryId);
   const totalPages = Math.max(1, productPage.totalPages || 1);
   const activePage = Math.min(Math.max(1, productPage.page || currentPage), totalPages);
   const startItem = productPage.total === 0 ? 0 : (activePage - 1) * PAGE_SIZE + 1;
@@ -77,35 +82,56 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   return (
     <div className="min-h-screen bg-mesh-radial text-ink-950">
       <SiteHeader />
-      <main id="content" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <main id="content" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
         <PageBreadcrumbs items={[{ label: "Products" }]} />
 
-        <SectionHeading
-          eyebrow="Catalog"
-          title={search ? `Results for "${search}"` : categoryId ? "Products in this category." : "Shop trusted health essentials."}
-          description={search ? "Browse products that match your search." : "Explore medicines, wellness products, and everyday essentials in one place."}
-        />
+        <section className="mx-auto max-w-3xl pt-5 text-center sm:pt-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">Product catalog</p>
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink-950 sm:text-5xl">Find what you need.</h1>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-ink-900/65 sm:text-base">Search by product name, brand, or category. We’ll help you get to the right product quickly.</p>
+        </section>
 
-        <div className="mt-7 max-w-2xl"><ProductSearch defaultValue={search} /></div>
+        <div className="mt-8"><ProductSearch defaultValue={search} id="catalog-product-search" prominent className="mx-auto max-w-2xl" /></div>
 
-        <div className="mt-6 flex flex-wrap gap-2.5">
-          <Link href="/products" className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!categoryId ? "bg-ink-950 text-white" : "border border-ink-900/10 bg-white text-ink-900 hover:border-brand-300 hover:text-brand-600"}`}>
-            All products
-          </Link>
-          {validCategories.slice(0, 6).map((category, index) => (
-            <Link
-              key={category.id || `category-filter-${index}`}
-              href={`/products?categoryId=${category.id}`}
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition ${categoryId === category.id ? "border-ink-950 bg-ink-950 text-white" : "border-ink-900/10 bg-white text-ink-800 hover:border-brand-300 hover:text-brand-600"}`}
-            >
-              {category.name || "Untitled category"}
-            </Link>
-          ))}
+        <section className="mt-10 rounded-[1.75rem] border border-sand-200 bg-white/90 p-4 shadow-[0_18px_50px_-38px_rgba(15,23,42,0.4)] sm:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-sm font-semibold text-ink-900"><SlidersHorizontal className="h-4 w-4 text-brand-600" /> Browse by category</div>
+            {(search || categoryId) ? <Link href="/products" className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-semibold text-brand-700 hover:bg-brand-50"><X className="h-4 w-4" /> Clear filters</Link> : null}
+          </div>
+          <div className="mt-4 hidden flex-wrap gap-2 sm:flex">
+            <Link href={search ? `/products?search=${encodeURIComponent(search)}` : "/products"} className={`rounded-full border px-3 py-1.5 text-sm font-medium transition ${!categoryId ? "border-ink-950 bg-ink-950 text-white" : "border-sand-200 bg-sand-50 text-ink-800 hover:border-brand-200 hover:text-brand-700"}`}>All products</Link>
+            {validCategories.map((category) => {
+              const params = new URLSearchParams();
+              if (search) params.set("search", search);
+              params.set("categoryId", category.id);
+              return <Link key={category.id} href={`/products?${params}`} className={`rounded-full border px-3 py-1.5 text-sm font-medium transition ${categoryId === category.id ? "border-brand-600 bg-brand-600 text-white" : "border-sand-200 bg-sand-50 text-ink-800 hover:border-brand-200 hover:text-brand-700"}`}>{category.name || "Untitled category"}</Link>;
+            })}
+          </div>
+          <details className="mt-4 sm:hidden">
+            <summary className="cursor-pointer rounded-xl bg-sand-50 px-3 py-2 text-sm font-medium text-ink-800">Choose a category</summary>
+            <div className="mt-2 grid gap-1">
+              <Link href={search ? `/products?search=${encodeURIComponent(search)}` : "/products"} className="rounded-xl px-3 py-2 text-sm font-medium text-ink-800 hover:bg-brand-50">All products</Link>
+              {validCategories.map((category) => {
+                const params = new URLSearchParams();
+                if (search) params.set("search", search);
+                params.set("categoryId", category.id);
+                return <Link key={category.id} href={`/products?${params}`} className={`rounded-xl px-3 py-2 text-sm font-medium ${categoryId === category.id ? "bg-brand-50 text-brand-700" : "text-ink-800 hover:bg-brand-50"}`}>{category.name || "Untitled category"}</Link>;
+              })}
+            </div>
+          </details>
+        </section>
+
+        <div className="mt-10 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-lg font-semibold text-ink-950">{search ? `Results for “${search}”` : activeCategory ? activeCategory.name : "All products"}</p>
+            <p className="mt-1 text-sm text-ink-900/60">{productPage.total} {productPage.total === 1 ? "product" : "products"} found{activeCategory ? ` in ${activeCategory.name}` : ""}.</p>
+          </div>
+          {categoryId ? <span className="rounded-full bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-700">{activeCategory?.name || "Category filter"}</span> : null}
         </div>
 
         {validProducts.length > 0 ? (
           <>
-            <div className="mt-10 grid grid-cols-2 gap-5 md:grid-cols-4">
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
               {validProducts.map((product, index) => (
                 <ProductCard
                   key={product.id || `product-${index}`}
@@ -115,15 +141,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col gap-3 rounded-[1.5rem] border border-ink-900/10 bg-white/90 px-4 py-4 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] sm:rounded-[2rem] sm:px-5 sm:flex-row sm:items-center sm:justify-between">
+            <nav aria-label="Product pages" className="mt-10 flex flex-col gap-3 rounded-[1.5rem] border border-sand-200 bg-white/90 px-4 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm leading-6 text-ink-900/70">
                 Showing {startItem}-{endItem} of {productPage.total} products
               </p>
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
-                <p className="order-first text-center text-sm font-medium text-ink-900/70 sm:order-none sm:px-2">
-                  Page {activePage} of {totalPages}
-                </p>
-                <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+              <div className="flex max-w-full items-center gap-2 overflow-x-auto pb-1 sm:overflow-visible sm:pb-0">
                   {hasPreviousPage ? (
                     <Link
                       href={buildPageHref(activePage - 1, search, categoryId)}
@@ -132,12 +154,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                       <ChevronLeft className="h-4 w-4" />
                       Previous
                     </Link>
-                  ) : (
-                    <span className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-400 sm:px-4">
-                      <ChevronLeft className="h-4 w-4" />
-                      Previous
-                    </span>
-                  )}
+                  ) : null}
+                  <div className="flex items-center gap-1">
+                    {visiblePages(activePage, totalPages).map((page, index, pages) => <span key={page} className="flex items-center gap-1">{index > 0 && page - pages[index - 1] > 1 ? <span className="px-1 text-ink-900/40">…</span> : null}<Link aria-current={page === activePage ? "page" : undefined} href={buildPageHref(page, search, categoryId)} className={`inline-flex h-9 min-w-9 items-center justify-center rounded-full px-2 text-sm font-semibold ${page === activePage ? "bg-ink-950 text-white" : "text-ink-800 hover:bg-brand-50 hover:text-brand-700"}`}>{page}</Link></span>)}
+                  </div>
                   {hasNextPage ? (
                     <Link
                       href={buildPageHref(activePage + 1, search, categoryId)}
@@ -146,20 +166,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                       Next
                       <ChevronRight className="h-4 w-4" />
                     </Link>
-                  ) : (
-                    <span className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-400 sm:px-4">
-                      Next
-                      <ChevronRight className="h-4 w-4" />
-                    </span>
-                  )}
-                </div>
+                  ) : null}
               </div>
-            </div>
+            </nav>
           </>
         ) : (
-          <div className="mt-10 rounded-[2rem] border border-dashed border-ink-900/10 bg-white p-8 text-sm text-ink-900/60">
-            No products match this search yet. Try another name or browse all products.
-            <Link href="/products" className="ml-2 font-semibold text-brand-600 hover:text-brand-700">Browse all products</Link>
+          <div className="mt-10 rounded-[2rem] border border-dashed border-sand-300 bg-white p-8 text-sm text-ink-900/65">
+            <p className="text-lg font-semibold text-ink-950">No matching products yet.</p>
+            <p className="mt-2 max-w-md leading-6">Try another product name, choose a different category, or return to the full catalog.</p>
+            <Link href="/products" className="mt-5 inline-flex rounded-full bg-brand-600 px-4 py-2 font-semibold text-white hover:bg-brand-700">Browse all products</Link>
           </div>
         )}
       </main>

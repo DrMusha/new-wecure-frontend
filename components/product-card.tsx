@@ -41,6 +41,7 @@ export function ProductCard({ product, categoryName }: ProductCardProps) {
           <h1 className="mt-2 line-clamp-2 min-h-10 text-sm font-bold leading-5 text-ink-950 sm:min-h-12 sm:text-lg sm:leading-6">
             {product.name}
           </h1>
+          {product.packSize ? <p className="mt-2 text-xs font-medium text-ink-900/55">{product.packSize}</p> : <span className="mt-2 h-4" aria-hidden="true" />}
         </div>
 
         <div className="mt-4 grid gap-3">
