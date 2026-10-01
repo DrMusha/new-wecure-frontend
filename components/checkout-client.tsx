@@ -63,6 +63,7 @@ export function CheckoutClient({ orderId }: CheckoutClientProps) {
       <SectionMessage
         title="Sign in to continue"
         description="Please sign in to complete payment for this order."
+        action={{ href: `/auth/login?next=/checkout/${orderId}`, label: "Sign in" }}
       />
     );
   }

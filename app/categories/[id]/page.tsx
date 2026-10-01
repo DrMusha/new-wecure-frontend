@@ -42,7 +42,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           ]}
         />
 
-        <Link href="/categories" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-ink-800">
+        <Link href="/categories" className="mt-4 inline-flex items-center gap-2 rounded-full border border-sand-200 bg-white px-4 py-2 text-sm font-medium text-ink-800 transition hover:border-brand-200 hover:text-brand-700">
           <ArrowLeft className="h-4 w-4" />
           Back to categories
         </Link>
@@ -85,6 +85,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </h2>
             </div>
             <p className="text-sm text-ink-900/60">{products.length} items</p>
+            <Link href={`/products?categoryId=${id}`} className="rounded-full border border-brand-200 bg-white px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-50">View in catalog</Link>
           </div>
 
           {products.length > 0 ? (

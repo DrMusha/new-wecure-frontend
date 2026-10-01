@@ -10,7 +10,7 @@ export default function TermsPage() {
         <PageShell
           eyebrow="Terms"
           title="Terms and conditions."
-          description="Legal content will be added as the new frontend matures."
+          description="WeCure is committed to a clear, dependable pharmacy shopping experience."
         />
       </main>
       <SiteFooter />

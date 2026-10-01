@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { BrandMark } from "@/components/brand-mark";
 import { AuthStatus } from "@/components/auth-status";
 import { CartLink } from "@/components/cart-link";
+import { MobileNavigation } from "@/components/mobile-navigation";
 
 const links = [
   { href: "/products", label: "Shop" },
@@ -26,7 +27,8 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
+    <>
+    <header className="sticky top-0 z-50 border-b border-sand-200 bg-white/95 shadow-sm backdrop-blur">
       <a
         href="#content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-blue-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
@@ -105,5 +107,7 @@ export function SiteHeader() {
         </div>
       ) : null}
     </header>
+    <MobileNavigation />
+    </>
   );
 }

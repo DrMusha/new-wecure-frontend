@@ -9,8 +9,8 @@ export default function AboutPage() {
       <main id="content">
         <PageShell
           eyebrow="About"
-          title="About the new frontend."
-          description="We will use this page to explain the product direction and trust signals."
+          title="Pharmacy shopping, designed around you."
+          description="WeCure brings product discovery, secure ordering, and account tools into one clear experience."
         />
       </main>
       <SiteFooter />

@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthFormShell } from "@/components/auth-form-shell";
 import { AuthMessage } from "@/components/auth-message";
 import { register } from "@/lib/backend";
+import { SiteHeader } from "@/components/site-header";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -36,11 +36,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-mesh-radial">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
-        <Link href="/" className="text-sm font-semibold uppercase tracking-[0.24em] text-ink-700">
-          WeCure
-        </Link>
-      </div>
+      <SiteHeader />
       <AuthFormShell
         eyebrow="Authentication"
         title="Create your account"

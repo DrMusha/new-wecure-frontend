@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ClipboardList, HeartPulse, ShoppingBag, UserCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const accountLinks = [
-  { href: "/account", label: "Profile" },
-  { href: "/orders", label: "Orders" },
-  { href: "/medical-card", label: "Medical Card" },
-  { href: "/bag", label: "Bag" },
+  { href: "/account", label: "Profile", icon: UserCircle2 },
+  { href: "/orders", label: "Orders", icon: ClipboardList },
+  { href: "/medical-card", label: "Medical Card", icon: HeartPulse },
+  { href: "/bag", label: "Bag", icon: ShoppingBag },
 ];
 
 export function AccountNav() {
@@ -22,6 +23,7 @@ export function AccountNav() {
     >
       <div className="flex flex-wrap gap-2">
         {accountLinks.map((link) => {
+          const Icon = link.icon;
           const active = currentPath === link.href || currentPath.startsWith(`${link.href}/`);
           return (
             <Link
@@ -29,12 +31,13 @@ export function AccountNav() {
               href={link.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100",
+                "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-100",
                 active
-                  ? "bg-blue-500 text-white shadow-sm"
-                  : "border border-slate-200/70 bg-slate-50 text-gray-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700",
+                  ? "bg-brand-600 text-white shadow-sm"
+                  : "border border-sand-200 bg-sand-50 text-ink-800 hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700",
               )}
             >
+              <Icon className="h-4 w-4" aria-hidden="true" />
               {link.label}
             </Link>
           );

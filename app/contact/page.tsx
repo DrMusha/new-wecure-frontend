@@ -10,7 +10,7 @@ export default function ContactPage() {
         <PageShell
           eyebrow="Contact"
           title="Talk to the team."
-          description="This will later hold the contact and support entry points."
+          description="Start with the product catalog or your account. We’re shaping support around the moments customers need it most."
         />
       </main>
       <SiteFooter />

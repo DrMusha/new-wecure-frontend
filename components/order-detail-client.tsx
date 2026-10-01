@@ -5,6 +5,7 @@ import { getOrder, type Order } from "@/lib/backend";
 import { SectionMessage } from "@/components/section-message";
 import { AuthMessage } from "@/components/auth-message";
 import { getAuthToken } from "@/lib/session";
+import Link from "next/link";
 
 type OrderDetailClientProps = {
   orderId: string;
@@ -49,6 +50,7 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
       <SectionMessage
         title="Sign in to view order details"
         description="Please sign in to view this order."
+        action={{ href: `/auth/login?next=/orders/${orderId}`, label: "Sign in" }}
       />
     );
   }
@@ -86,6 +88,11 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
         </div>
         {order.payment?.provider ? (
           <p className="mt-2 text-sm text-ink-900/60">Provider: {order.payment.provider}</p>
+        ) : null}
+        {order.payment?.status !== "successful" ? (
+          <Link href={`/checkout/${order.id}`} className="mt-5 inline-flex rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">
+            {order.payment ? "Continue payment" : "Pay for this order"}
+          </Link>
         ) : null}
       </section>
 

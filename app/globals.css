@@ -20,6 +20,12 @@ body {
   font-family: "ui-sans-serif", "system-ui", sans-serif;
 }
 
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  }
+}
+
 * {
   box-sizing: border-box;
 }

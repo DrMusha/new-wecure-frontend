@@ -60,6 +60,7 @@ export function OrdersClient() {
       <SectionMessage
         title="Sign in to view your orders"
         description="Please sign in to view your orders."
+        action={{ href: "/auth/login?next=/orders", label: "Sign in" }}
       />
     );
   }
@@ -69,7 +70,7 @@ export function OrdersClient() {
   }
 
   if (orders.length === 0) {
-    return <SectionMessage title="No orders yet" description="Once you place a checkout, the order history will appear here." />;
+    return <SectionMessage title="No orders yet" description="Once you place a checkout, the order history will appear here." action={{ href: "/products", label: "Start shopping" }} />;
   }
 
   function goToPreviousPage() {

@@ -10,7 +10,7 @@ export default function PrivacyPage() {
         <PageShell
           eyebrow="Privacy"
           title="Privacy policy."
-          description="We will document how the frontend handles customer and medical data."
+          description="Your account, order, and medical information deserve careful handling and clear communication."
         />
       </main>
       <SiteFooter />

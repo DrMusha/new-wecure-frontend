@@ -243,6 +243,7 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
       <SectionMessage
         title="Sign in to pay for this order"
         description="Please sign in to start and track your payment."
+        action={{ href: `/auth/login?next=/checkout/${orderId}`, label: "Sign in" }}
       />
     );
   }
