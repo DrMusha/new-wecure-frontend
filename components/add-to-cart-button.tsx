@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Check, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/cart";
 import type { Product } from "@/lib/backend";
@@ -15,16 +16,27 @@ type AddToCartButtonProps = {
 export function AddToCartButton({ product, className }: AddToCartButtonProps) {
   const [added, setAdded] = useState(false);
 
+  useEffect(() => {
+    if (!added) return;
+    const timer = window.setTimeout(() => setAdded(false), 3000);
+    return () => window.clearTimeout(timer);
+  }, [added]);
+
   function handleAdd() {
     addToCart(product, 1);
     setAdded(true);
-    window.setTimeout(() => setAdded(false), 1800);
   }
 
-  return (
+  return <>
     <Button type="button" onClick={handleAdd} className={cn("gap-2", className)}>
-      <ShoppingBag className="h-4 w-4" />
+      {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
       {added ? "Added to bag" : "Add to bag"}
     </Button>
-  );
+    {added ? (
+      <div role="status" className="fixed inset-x-4 bottom-4 z-[70] mx-auto flex max-w-md items-center justify-between gap-3 rounded-2xl bg-ink-950 px-4 py-3 text-sm text-white shadow-2xl sm:bottom-6">
+        <span className="min-w-0 truncate"><span className="font-semibold">Added to bag.</span> {product.name}</span>
+        <Link href="/bag" className="shrink-0 rounded-full bg-white px-3 py-1.5 font-semibold text-ink-950 hover:bg-brand-50">View bag</Link>
+      </div>
+    ) : null}
+  </>;
 }

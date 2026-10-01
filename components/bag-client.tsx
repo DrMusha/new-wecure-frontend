@@ -20,6 +20,7 @@ import {
   saveDeliveryDetails,
 } from "@/lib/backend";
 import { getAuthToken, getAuthUser } from "@/lib/session";
+import { MapPin, ShoppingBag } from "lucide-react";
 
 type DeliveryState = {
   address: string;
@@ -76,6 +77,7 @@ export function BagClient() {
     () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
     [cart],
   );
+  const itemCount = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
 
   function sync(next: CartItem[]) {
     setCart(next);
@@ -90,8 +92,12 @@ export function BagClient() {
     setMessage(null);
 
     try {
+      if (cart.length === 0) {
+        throw new Error("Your bag is empty. Add a product before continuing to checkout.");
+      }
       if (!token) {
-        throw new Error("Please sign in before checking out.");
+        router.push("/auth/login?next=/bag");
+        return;
       }
 
       await saveDeliveryDetails(token, delivery);
@@ -116,9 +122,9 @@ export function BagClient() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold text-ink-950 sm:text-2xl">Your bag</h2>
-            <p className="mt-1 text-sm text-ink-900/60">{cart.length} items ready for checkout</p>
+            <p className="mt-1 text-sm text-ink-900/60">{itemCount} {itemCount === 1 ? "item" : "items"} ready for checkout</p>
           </div>
-          <Button type="button" variant="ghost" onClick={() => sync([])}>
+          <Button type="button" variant="ghost" onClick={() => sync([])} disabled={cart.length === 0}>
             Clear bag
           </Button>
         </div>
@@ -149,7 +155,9 @@ export function BagClient() {
             ))
           ) : (
             <div className="rounded-3xl border border-dashed border-ink-900/10 bg-sand-50 p-6 text-sm text-ink-900/65 sm:p-8">
-              Your bag is empty. Browse the catalog and add products from the product detail page.
+              <ShoppingBag className="h-6 w-6 text-brand-600" aria-hidden="true" />
+              <p className="mt-3">Your bag is empty. Find the medicines and essentials you need, then return here to check out.</p>
+              <Link href="/products" className="mt-4 inline-flex rounded-full bg-brand-600 px-4 py-2 font-semibold text-white hover:bg-brand-700">Browse products</Link>
             </div>
           )}
         </div>
@@ -162,16 +170,19 @@ export function BagClient() {
 
       <aside className="space-y-6">
         <section className="rounded-[2rem] border border-ink-900/10 bg-white p-4 shadow-sm sm:p-6">
-          <h2 className="text-xl font-semibold text-ink-950 sm:text-2xl">Delivery details</h2>
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600"><MapPin className="h-5 w-5" /></span>
+            <div><h2 className="text-xl font-semibold text-ink-950 sm:text-2xl">Delivery details</h2><p className="mt-1 text-sm text-ink-900/60">We’ll save these for your next order.</p></div>
+          </div>
           <div className="mt-5 grid gap-4">
-            <Input value={delivery.address} onChange={(e) => setDelivery((prev) => ({ ...prev, address: e.target.value }))} placeholder="Address" />
+            <Input aria-label="Delivery address" value={delivery.address} onChange={(e) => setDelivery((prev) => ({ ...prev, address: e.target.value }))} placeholder="Delivery address" required />
             <div className="grid gap-4 sm:grid-cols-2">
-              <Input value={delivery.city} onChange={(e) => setDelivery((prev) => ({ ...prev, city: e.target.value }))} placeholder="City" />
-              <Input value={delivery.state} onChange={(e) => setDelivery((prev) => ({ ...prev, state: e.target.value }))} placeholder="State / Province" />
+              <Input aria-label="City" value={delivery.city} onChange={(e) => setDelivery((prev) => ({ ...prev, city: e.target.value }))} placeholder="City" required />
+              <Input aria-label="Province" value={delivery.state} onChange={(e) => setDelivery((prev) => ({ ...prev, state: e.target.value }))} placeholder="Province" required />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Input value={delivery.country} onChange={(e) => setDelivery((prev) => ({ ...prev, country: e.target.value }))} placeholder="Country" />
-              <Input value={delivery.phoneNumber} onChange={(e) => setDelivery((prev) => ({ ...prev, phoneNumber: e.target.value }))} placeholder="Phone number" />
+              <Input aria-label="Country" value={delivery.country} onChange={(e) => setDelivery((prev) => ({ ...prev, country: e.target.value }))} placeholder="Country" required />
+              <Input aria-label="Phone number" value={delivery.phoneNumber} onChange={(e) => setDelivery((prev) => ({ ...prev, phoneNumber: e.target.value }))} placeholder="Mobile number" inputMode="tel" required />
             </div>
             <Textarea value={prescription} onChange={(e) => setPrescription(e.target.value)} placeholder="Prescription notes or instructions" />
           </div>
@@ -180,16 +191,16 @@ export function BagClient() {
         <section className="rounded-[2rem] border border-ink-900/10 bg-white p-4 shadow-sm sm:p-6">
           <h2 className="text-xl font-semibold text-ink-950 sm:text-2xl">Checkout</h2>
           <p className="mt-2 text-sm leading-6 text-ink-900/65 sm:leading-7">
-            Save your delivery details and place your order when you are ready.
+            Review your delivery details, then create your order and continue straight to secure payment.
           </p>
           {error ? <div className="mt-4"><AuthMessage tone="error">{error}</AuthMessage></div> : null}
           {message ? <div className="mt-4"><AuthMessage tone="success">{message}</AuthMessage></div> : null}
           <Button className="mt-6 w-full" type="button" onClick={handleCheckout} disabled={pending || cart.length === 0}>
-            {pending ? "Placing order..." : "Place order"}
+            {pending ? "Creating your order..." : token ? "Continue to payment" : "Sign in to continue"}
           </Button>
           {!token ? (
             <p className="mt-4 text-sm text-ink-900/60">
-              Please <Link href="/auth/login" className="font-medium text-brand-600">sign in</Link> to complete checkout.
+              Sign in before continuing so your delivery and order history are saved securely.
             </p>
           ) : null}
         </section>

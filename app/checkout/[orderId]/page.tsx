@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { CheckoutClient } from "@/components/checkout-client";
 import { PageBreadcrumbs } from "@/components/page-breadcrumbs";
 import { SectionHeading } from "@/components/section-heading";
+import { CheckoutSteps } from "@/components/checkout-steps";
 
 export const metadata = {
   title: "Checkout | WeCure",
@@ -24,9 +25,10 @@ export default async function CheckoutPage({
         <SectionHeading
           eyebrow="Checkout"
           title="Complete your payment."
-          description="Use one mobile money number for MTN, Airtel Money, or Zamtel Money. We will track the payment status here."
+          description="Use your MTN, Airtel Money, or Zamtel Money number. Keep this page open while we confirm payment."
         />
-        <div className="mt-10">
+        <div className="mt-8"><CheckoutSteps current="payment" /></div>
+        <div className="mt-8">
           <CheckoutClient orderId={orderId} />
         </div>
       </main>

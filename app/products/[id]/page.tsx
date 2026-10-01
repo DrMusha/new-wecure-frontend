@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Package2, ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Package2, ShieldCheck, Sparkles } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { PageBreadcrumbs } from "@/components/page-breadcrumbs";
 import { ProductGallery } from "@/components/product-gallery";
@@ -96,7 +96,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </p>
               </div>
 
-              <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="flex items-center gap-2 text-blue-600">
                     <Package2 className="h-4 w-4" />
@@ -115,18 +115,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="flex items-center gap-2 text-blue-600">
-                    <Truck className="h-4 w-4" />
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Fulfillment</p>
-                  </div>
-                  <p className="mt-2 text-sm font-semibold text-ink-950">Fast local delivery</p>
-                </div>
-
-                <div className="rounded-2xl bg-slate-50 p-4">
-                  <div className="flex items-center gap-2 text-blue-600">
                     <ShieldCheck className="h-4 w-4" />
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Source</p>
                   </div>
-                  <p className="mt-2 text-sm font-semibold text-ink-950">Trusted listing</p>
+                  <p className="mt-2 text-sm font-semibold text-ink-950">WeCure Pharmacy</p>
                 </div>
               </div>
 

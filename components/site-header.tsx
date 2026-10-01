@@ -1,21 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { BrandMark } from "@/components/brand-mark";
 import { AuthStatus } from "@/components/auth-status";
 import { CartLink } from "@/components/cart-link";
 
 const links = [
+  { href: "/products", label: "Shop" },
   { href: "/categories", label: "Categories" },
-  { href: "/products", label: "Products" },
-  { href: "/orders", label: "Orders" },
-  { href: "/medical-card", label: "Medical Card" },
 ];
 
 export function SiteHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   function closeMobileMenu() {
     setIsMobileMenuOpen(false);
@@ -41,7 +41,7 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-full text-sm font-medium text-gray-700 transition hover:text-blue-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+              className={`rounded-full px-2 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 ${pathname === link.href ? "bg-brand-50 text-brand-700" : "text-gray-700 hover:text-blue-500"}`}
             >
               {link.label}
             </Link>
@@ -51,9 +51,9 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <Link
             href="/search"
-            className="hidden rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-blue-300 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 sm:inline-flex"
+            className="hidden items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-blue-300 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 sm:inline-flex"
           >
-            Search
+            <Search className="h-4 w-4" /> Search
           </Link>
           <div className="hidden md:block">
             <CartLink />
@@ -83,16 +83,16 @@ export function SiteHeader() {
               <Link
                 href="/search"
                 onClick={closeMobileMenu}
-                className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-800 transition hover:border-blue-300 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-800 transition hover:border-blue-300 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
               >
-                Search
+                <Search className="h-4 w-4" /> Search medicines
               </Link>
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={closeMobileMenu}
-                  className="rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:border-blue-300 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+                className={`rounded-2xl border px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 ${pathname === link.href ? "border-brand-200 bg-brand-50 text-brand-700" : "border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:text-blue-600"}`}
                 >
                   {link.label}
                 </Link>

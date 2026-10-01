@@ -11,7 +11,6 @@ import {
   ShieldCheck,
   Stethoscope,
   UserCircle2,
-  Users,
 } from "lucide-react";
 import { clearAuthSession, getAuthToken, getAuthUser, type AuthUser } from "@/lib/session";
 
@@ -65,8 +64,14 @@ export function AccountDashboard() {
     {
       href: "/orders",
       title: "Orders",
-      description: "Review your recent purchases and checkout history.",
-      icon: Users,
+      description: "Track payment, fulfilment, and delivery progress.",
+      icon: ShoppingBag,
+    },
+    {
+      href: "/products",
+      title: "Shop products",
+      description: "Find medicines and essentials for your next order.",
+      icon: ArrowRight,
     },
     {
       href: "/medical-card",
@@ -135,10 +140,6 @@ export function AccountDashboard() {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">Role</p>
                 <p className="mt-1 font-semibold text-gray-950">{roleLabel}</p>
               </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">User ID</p>
-                <p className="mt-1 break-all font-semibold text-gray-950">{user.id}</p>
-              </div>
             </div>
           </div>
 
@@ -198,7 +199,7 @@ export function AccountDashboard() {
             <div className="flex items-start gap-3">
               <Mail className="mt-0.5 h-4 w-4 text-blue-600" />
               <p className="text-sm leading-7 text-gray-600">
-                Keeps your identity visible in the app so you can trust where your orders and health data are going.
+                Keeps your profile ready for faster checkout and order updates.
               </p>
             </div>
             <div className="flex items-start gap-3">

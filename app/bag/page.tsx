@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { BagClient } from "@/components/bag-client";
 import { PageBreadcrumbs } from "@/components/page-breadcrumbs";
 import { SectionHeading } from "@/components/section-heading";
+import { CheckoutSteps } from "@/components/checkout-steps";
 
 export const metadata = {
   title: "Bag | WeCure",
@@ -19,9 +20,10 @@ export default function BagPage() {
         <SectionHeading
           eyebrow="Bag"
           title="Review your items and complete checkout."
-          description="Add your delivery details before placing your order."
+          description="Confirm your items and delivery details, then pay securely by mobile money."
         />
-        <div className="mt-10">
+        <div className="mt-8 max-w-3xl"><CheckoutSteps current="bag" /></div>
+        <div className="mt-8">
           <BagClient />
         </div>
       </main>

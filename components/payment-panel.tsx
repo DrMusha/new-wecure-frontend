@@ -261,7 +261,7 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
           </div>
           <h2 className="mt-4 text-2xl font-semibold text-ink-950">Pay with your phone</h2>
           <p className="mt-2 text-sm leading-6 text-ink-900/60">
-            Enter one mobile money number. We detect the network from your number.
+            Enter one mobile money number. We detect the network, send a prompt to your phone, and confirm the result here.
           </p>
         </div>
         <Button type="button" variant="secondary" onClick={refreshPayments} disabled={refreshing || pending} className="self-start px-4 py-2.5">
@@ -270,6 +270,13 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
       </div>
 
       <PaymentStatusWidget payment={latestPayment} pending={pending} />
+      {!isSuccessful && !hasStartedPayment ? (
+        <ol className="mt-5 grid gap-2 rounded-2xl bg-sand-50 p-4 text-sm text-ink-900/70 sm:grid-cols-3">
+          <li><span className="mr-2 font-semibold text-brand-700">1.</span>Enter your number</li>
+          <li><span className="mr-2 font-semibold text-brand-700">2.</span>Approve the prompt</li>
+          <li><span className="mr-2 font-semibold text-brand-700">3.</span>Wait for confirmation</li>
+        </ol>
+      ) : null}
       {error ? <div className="mt-4"><AuthMessage tone="error">{error}</AuthMessage></div> : null}
       {message && !error ? <div className="mt-4"><AuthMessage tone="success">{message}</AuthMessage></div> : null}
 
@@ -296,6 +303,7 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
             <Input value={form.lastName} onChange={(e) => setForm((prev) => ({ ...prev, lastName: e.target.value }))} placeholder="Last name" disabled={isProcessing} className="h-12 border-sand-200 bg-white" />
           </div>
           <Input value={form.email} onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))} type="email" placeholder="Email" disabled={isProcessing} className="h-12 border-sand-200 bg-white" />
+          <p className="text-xs leading-5 text-ink-900/55">A mobile-money prompt should appear after you send the request. If it does not, check the number and try again.</p>
           <Button type="submit" disabled={isProcessing} className="hidden sm:inline-flex">
             {isProcessing ? "Awaiting confirmation..." : "Send payment request"}
           </Button>
@@ -346,6 +354,10 @@ function PaymentStatusWidget({ payment, pending }: { payment: Payment | null; pe
         <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Payment status</p>
         <h3 className="mt-2 text-3xl font-semibold text-emerald-950">Successful</h3>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-emerald-700">Your payment has been confirmed and the order is now being processed.</p>
+        <div className="mt-5 flex flex-col justify-center gap-2 sm:flex-row">
+          <a href="/orders" className="rounded-full bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800">View my orders</a>
+          <a href="/products" className="rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100">Continue shopping</a>
+        </div>
       </div>
     );
   }
@@ -358,7 +370,7 @@ function PaymentStatusWidget({ payment, pending }: { payment: Payment | null; pe
         </span>
         <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-rose-700">Payment status</p>
         <h3 className="mt-2 text-3xl font-semibold text-rose-950">Failed</h3>
-        <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-rose-700">Check your details and send a new payment request when you are ready.</p>
+        <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-rose-700">Check the number and your available balance, then send a new payment request when you are ready.</p>
       </div>
     );
   }
