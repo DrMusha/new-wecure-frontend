@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, PackageCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { HomepageProductSearch } from "@/components/homepage-product-search";
 
 export function Hero() {
@@ -48,31 +48,22 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="mx-auto grid w-full max-w-lg gap-3 sm:grid-cols-[1.45fr_0.9fr] lg:mx-0 lg:max-w-none lg:self-stretch">
-          <div className="relative min-h-64 overflow-hidden rounded-[2rem] border border-white/80 bg-white p-2 shadow-[0_30px_80px_-52px_rgba(15,23,42,0.7)] sm:min-h-80 sm:rounded-[2.5rem] sm:p-3 lg:min-h-0">
-            <Image src="/assets/image2.jpg" alt="WeCure pharmacy products" fill priority className="object-cover object-center" />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.46)_0%,rgba(15,23,42,0.06)_65%)]" />
-            <div className="absolute bottom-4 left-4 max-w-xs rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur sm:bottom-6 sm:left-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">Simple from start to finish</p>
-              <p className="mt-1 text-sm font-semibold text-ink-950">Search, add to bag, and pay with your phone.</p>
+          <div className="relative mx-auto h-[29rem] w-full max-w-lg lg:mx-0 lg:h-[34rem] lg:max-w-none">
+            <div className="absolute bottom-0 left-0 h-[72%] w-[78%] overflow-hidden rounded-[2rem] border-4 border-white bg-white shadow-[0_30px_80px_-48px_rgba(15,23,42,0.62)] sm:rounded-[2.5rem]">
+              <Image src="/assets/image2.jpg" alt="WeCure pharmacy products" fill priority className="object-cover object-center" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.04)_42%,rgba(15,23,42,0.55)_100%)]" />
+              <p className="absolute bottom-5 left-5 right-5 text-sm font-semibold text-white sm:bottom-6 sm:left-6">Everyday care, all in one place.</p>
             </div>
-            <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-3 py-2 text-xs font-semibold text-brand-700 shadow-sm backdrop-blur sm:right-6 sm:top-6">
-              <CheckCircle2 className="h-4 w-4" aria-hidden="true" /> WeCure Pharmacy
-            </div>
-          </div>
 
-          <div className="grid gap-3 sm:grid-rows-[1fr_auto]">
-            <div className="relative min-h-48 overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_24px_60px_-42px_rgba(15,23,42,0.6)] lg:min-h-0">
-              <Image src="/assets/image1.jpg" alt="Everyday health and wellness products" fill className="object-cover object-center" />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.02)_35%,rgba(15,23,42,0.46)_100%)]" />
-              <p className="absolute bottom-4 left-4 right-4 text-sm font-semibold text-white">Everyday care, all in one place.</p>
-            </div>
-            <div className="flex items-start gap-3 rounded-[2rem] border border-brand-100 bg-white/90 p-4 shadow-sm">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600"><PackageCheck className="h-5 w-5" /></span>
-              <div><p className="font-semibold text-ink-950">Built for clear choices</p><p className="mt-1 text-sm leading-6 text-ink-900/60">Browse product details and keep your order history in one place.</p></div>
+            <div className="absolute right-0 top-0 z-10 h-[78%] w-[76%] overflow-hidden rounded-[2rem] border-4 border-white bg-white shadow-[0_30px_80px_-42px_rgba(15,23,42,0.68)] sm:rounded-[2.5rem]">
+              <Image src="/assets/image1.jpg" alt="A WeCure pharmacist ready to help" fill className="object-cover object-[62%_center]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.02)_42%,rgba(15,23,42,0.5)_100%)]" />
+              <div className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/80">WeCure Pharmacy</p>
+                <p className="mt-1 text-sm font-semibold text-white">Here to help you make clear, confident choices.</p>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </section>

@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
 
               <div className="mt-4 border-b border-slate-200/70 pb-5">
-                <h1 className="text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl">
+                <h1 className="break-words text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl">
                   {product.name}
                 </h1>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-ink-900/70">

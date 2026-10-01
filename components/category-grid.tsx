@@ -17,9 +17,11 @@ function getFallbackGradient(index: number) {
 
 export async function CategoryGrid() {
   const categories = await listCategories().catch(() => []);
-  const visibleCategories = categories.slice(0, 6).filter((category) => category?.id);
-  const leadCategory = visibleCategories[0];
-  const otherCategories = visibleCategories.slice(1);
+  const categoryCandidates = categories.slice(0, 6).filter((category) => category?.id);
+  // Keep the visual rhythm deliberate: the section renders category pairs only.
+  const visibleCategories = categoryCandidates.length % 2 === 0
+    ? categoryCandidates
+    : categoryCandidates.slice(0, -1);
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
@@ -43,54 +45,9 @@ export async function CategoryGrid() {
           </Link>
         </div>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-12">
-          {leadCategory ? (
-            <Link
-              href={`/products?categoryId=${leadCategory.id}`}
-              className="group relative min-h-[18rem] overflow-hidden rounded-[2rem] border border-sand-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-brand-200 hover:shadow-[0_24px_70px_-46px_rgba(15,23,42,0.5)] lg:col-span-6"
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${getFallbackGradient(0)}`} />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.16),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(191,219,254,0.3),transparent_28%)]" />
-              <div className="relative flex h-full flex-col justify-between p-6 sm:p-8">
-                <div className="max-w-sm">
-                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-700">
-                    Start here
-                  </p>
-                  <h3 className="mt-3 text-3xl font-semibold tracking-tight text-gray-950">
-                    {leadCategory.name?.trim() || "Untitled category"}
-                  </h3>
-                  <p className="mt-4 text-sm leading-7 text-ink-900/65">
-                    {leadCategory.description || "Browse a focused selection of products in this category."}
-                  </p>
-                </div>
-
-                <div className="mt-8 flex items-end justify-between gap-4">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-brand-700 shadow-sm backdrop-blur">
-                    Shop category
-                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-                  </div>
-                  <div className="relative h-24 w-24 overflow-hidden rounded-3xl border border-white/80 bg-white shadow-sm">
-                    {leadCategory.imageUrl ? (
-                      <Image
-                        src={leadCategory.imageUrl}
-                        alt={leadCategory.name || "Category"}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-white text-brand-600">
-                        <PackageSearch className="h-8 w-8" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ) : null}
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:col-span-6">
-            {otherCategories.length > 0 ? (
-              otherCategories.map((category, index) => {
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleCategories.length > 0 ? (
+              visibleCategories.map((category, index) => {
                 const label = category.name?.trim() || "Untitled";
                 return (
                   <Link
@@ -100,7 +57,7 @@ export async function CategoryGrid() {
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${getFallbackGradient(index + 1)}`} />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.92)_82%)]" />
-                    <div className="relative flex h-full min-h-[12rem] flex-col justify-between p-5">
+                    <div className="relative flex h-full min-h-[13rem] flex-col justify-between p-5">
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-600">
@@ -138,13 +95,12 @@ export async function CategoryGrid() {
                 );
               })
             ) : (
-              <div className="sm:col-span-2 lg:col-span-6">
+              <div className="sm:col-span-2 lg:col-span-3">
                 <div className="rounded-[2rem] border border-dashed border-sand-300 bg-white/80 p-6 text-sm leading-7 text-ink-900/65">
                   Categories are being prepared. You can still browse the full catalog.
                 </div>
               </div>
             )}
-          </div>
         </div>
     </section>
   );

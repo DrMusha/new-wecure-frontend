@@ -11,9 +11,10 @@ import { cn } from "@/lib/utils";
 type AddToCartButtonProps = {
   product: Product;
   className?: string;
+  compact?: boolean;
 };
 
-export function AddToCartButton({ product, className }: AddToCartButtonProps) {
+export function AddToCartButton({ product, className, compact = false }: AddToCartButtonProps) {
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
@@ -29,8 +30,13 @@ export function AddToCartButton({ product, className }: AddToCartButtonProps) {
 
   return <>
     <Button type="button" onClick={handleAdd} className={cn("gap-2", className)}>
-      {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
-      {added ? "Added to bag" : "Add to bag"}
+      {added ? <Check className="h-4 w-4 shrink-0" /> : <ShoppingBag className="h-4 w-4 shrink-0" />}
+      {compact ? (
+        <>
+          <span className="sm:hidden">{added ? "Added" : "Add"}</span>
+          <span className="hidden sm:inline">{added ? "Added to bag" : "Add to bag"}</span>
+        </>
+      ) : (added ? "Added to bag" : "Add to bag")}
     </Button>
     {added ? (
       <div role="status" className="fixed inset-x-4 bottom-4 z-[70] mx-auto flex max-w-md items-center justify-between gap-3 rounded-2xl bg-ink-950 px-4 py-3 text-sm text-white shadow-2xl sm:bottom-6">

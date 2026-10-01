@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { listProducts } from "@/lib/backend";
 import { LoadingProductCard, ProductCard } from "@/components/product-card";
 import Link from "next/link";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 async function getFeaturedProducts() {
   return listProducts({ status: "published", isFeatured: true, limit: 8 }).catch(() => []);
@@ -9,32 +10,28 @@ async function getFeaturedProducts() {
 
 export function FeaturedProducts() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-      <div className="rounded-[1.5rem] border border-blue-100 bg-[linear-gradient(180deg,#eff6ff_0%,#ffffff_42%,#ffffff_100%)] p-3 shadow-sm sm:rounded-[2.5rem] sm:p-6 lg:p-8">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+    <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+      <div className="rounded-[2rem] border border-brand-100 bg-[radial-gradient(circle_at_top_right,rgba(191,219,254,0.72),transparent_27%),linear-gradient(180deg,#f8fbff_0%,#ffffff_42%)] p-5 shadow-sm sm:rounded-[2.5rem] sm:p-7 lg:p-8">
+        <div className="flex flex-col gap-5 border-b border-brand-100 pb-6 sm:flex-row sm:items-end sm:justify-between sm:pb-7">
           <div className="max-w-2xl">
-            <div className="flex w-fit items-center gap-1 rounded-lg border border-gray-200 bg-white p-1.5 shadow-sm sm:p-2">
-              <div className="h-5 w-1 rounded-full bg-blue-400 sm:h-6" />
-              <h2 className="text-base font-bold tracking-tight text-gray-900 sm:text-lg lg:text-3xl">
-                Featured Items
-              </h2>
-            </div>
-            <p className="mt-3 text-sm leading-6 text-gray-500 sm:mt-4 sm:text-base sm:leading-7">
-              A hand-picked selection of the items customers reach for most.
+            <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
+              Popular essentials
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-ink-950 sm:text-4xl">
+              Featured items, ready when you are.
+            </h2>
+            <p className="mt-3 max-w-xl text-sm leading-7 text-ink-900/65 sm:text-base">
+              A considered selection of products customers come back for—add them to your bag in a tap or explore the details first.
             </p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-3 md:max-w-[28rem] lg:max-w-[34rem]">
-            {[
-              { title: "Popular now", text: "Customer favorites" },
-              { title: "Easy browse", text: "Quick to scan" },
-              { title: "Trusted pick", text: "Featured essentials" },
-            ].map((item) => (
-              <div key={item.title} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-500">{item.title}</p>
-                <p className="mt-2 text-sm font-semibold text-gray-900">{item.text}</p>
-              </div>
-            ))}
-          </div>
+          <Link
+            href="/products"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-brand-200 bg-white px-5 py-3 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-100"
+          >
+            Browse all products
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
 
         <Suspense fallback={<LoadingRows />}>
@@ -50,10 +47,17 @@ async function FeaturedProductsList() {
 
   return (
     <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
-      <div className="col-span-full mt-2 flex justify-center"><Link href="/products" className="rounded-full border border-brand-200 bg-white px-5 py-3 text-sm font-semibold text-brand-700 transition hover:bg-brand-50">View all products</Link></div>
+      {products.length > 0 ? products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        )) : (
+          <div className="col-span-full rounded-[1.5rem] border border-dashed border-brand-200 bg-white/80 px-6 py-10 text-center">
+            <p className="text-base font-semibold text-ink-950">Featured products are being refreshed.</p>
+            <p className="mt-2 text-sm text-ink-900/65">Browse the full catalogue to find what you need.</p>
+            <Link href="/products" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-800">
+              Browse products <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+        )}
     </div>
   );
 }

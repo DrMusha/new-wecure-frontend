@@ -18,7 +18,7 @@ export function PageBreadcrumbs({ items, className }: PageBreadcrumbsProps) {
   }
 
   return (
-    <nav aria-label="Breadcrumb" className={cn("flex items-center gap-2 text-sm", className)}>
+    <nav aria-label="Breadcrumb" className={cn("flex flex-wrap items-center gap-2 text-sm", className)}>
       <Link
         href="/"
         className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/80 px-3 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
@@ -27,7 +27,7 @@ export function PageBreadcrumbs({ items, className }: PageBreadcrumbsProps) {
         Home
       </Link>
       {items.map((item) => (
-        <span key={item.label} className="flex items-center gap-2">
+        <span key={item.label} className="flex min-w-0 items-center gap-2">
           <ChevronRight className="h-4 w-4 text-gray-400" />
           {item.href ? (
             <Link
@@ -37,7 +37,7 @@ export function PageBreadcrumbs({ items, className }: PageBreadcrumbsProps) {
               {item.label}
             </Link>
           ) : (
-            <span className="rounded-full px-2 py-1 font-semibold text-gray-950">
+            <span className="max-w-full break-words rounded-full px-2 py-1 font-semibold text-gray-950">
               {item.label}
             </span>
           )}
