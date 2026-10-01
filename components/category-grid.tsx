@@ -45,7 +45,7 @@ export async function CategoryGrid() {
           </Link>
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
             {visibleCategories.length > 0 ? (
               visibleCategories.map((category, index) => {
                 const label = category.name?.trim() || "Untitled";
@@ -57,13 +57,13 @@ export async function CategoryGrid() {
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${getFallbackGradient(index + 1)}`} />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.92)_82%)]" />
-                    <div className="relative flex h-full min-h-[13rem] flex-col justify-between p-5">
+                    <div className="relative flex h-full min-h-[12rem] flex-col justify-between p-4 sm:min-h-[13rem] sm:p-5">
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-600">
                             Category
                           </p>
-                          <h3 className="mt-2 text-lg font-semibold text-gray-950">
+                          <h3 className="mt-2 text-base font-semibold text-gray-950 sm:text-lg">
                             {label}
                           </h3>
                         </div>
@@ -83,7 +83,7 @@ export async function CategoryGrid() {
                       </div>
 
                       <div className="flex items-center justify-between gap-3">
-                        <p className="max-w-[14rem] text-sm leading-6 text-ink-900/65">
+                        <p className="line-clamp-2 max-w-[14rem] text-xs leading-5 text-ink-900/65 sm:text-sm sm:leading-6">
                           {category.description || "Browse products selected for this category."}
                         </p>
                         <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/90 text-brand-600 shadow-sm ring-1 ring-brand-100 transition group-hover:translate-x-0.5">
