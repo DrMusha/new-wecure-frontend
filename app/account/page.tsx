@@ -14,20 +14,14 @@ export default function AccountPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(219,234,254,0.72),transparent_42%),linear-gradient(180deg,#f8fbff_0%,#eff5fb_56%,#ffffff_100%)] text-gray-900">
       <SiteHeader />
-      <main id="content" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+      <main id="content" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
         <PageBreadcrumbs items={[{ label: "Account" }]} />
 
-        <div className="max-w-3xl">
-          <p className="inline-flex items-center rounded-full border border-blue-100 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-blue-700 shadow-sm">
-            Account
-          </p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
-            Your profile and saved account details.
-          </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-500 sm:text-base">
-            This section brings together your profile details and quick routes to the parts of WeCure you use most often.
-          </p>
-        </div>
+        <section className="mt-6 max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">My account</p>
+          <h1 className="mt-3 text-3xl font-bold tracking-tight text-ink-950 sm:text-4xl">Your account, all in one place.</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-ink-900/65 sm:text-base">Manage your profile, review orders, and pick up where you left off with your health essentials.</p>
+        </section>
 
         <div className="mt-8">
           <AccountNav />

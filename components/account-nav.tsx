@@ -19,9 +19,9 @@ export function AccountNav() {
   return (
     <nav
       aria-label="Account navigation"
-      className="rounded-[2rem] border border-white/80 bg-white/90 p-3 shadow-sm ring-1 ring-slate-200/70 backdrop-blur"
+      className="overflow-x-auto rounded-[1.5rem] border border-sand-200 bg-white p-2 shadow-sm"
     >
-      <div className="flex flex-wrap gap-2">
+      <div className="flex min-w-max gap-2">
         {accountLinks.map((link) => {
           const Icon = link.icon;
           const active = currentPath === link.href || currentPath.startsWith(`${link.href}/`);
@@ -31,7 +31,7 @@ export function AccountNav() {
               href={link.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-100",
+                "inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-100",
                 active
                   ? "bg-brand-600 text-white shadow-sm"
                   : "border border-sand-200 bg-sand-50 text-ink-800 hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700",

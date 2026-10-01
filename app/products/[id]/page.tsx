@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Package2, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Package2, ShieldCheck, Sparkles } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { PageBreadcrumbs } from "@/components/page-breadcrumbs";
 import { ProductGallery } from "@/components/product-gallery";
@@ -135,20 +135,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
 
-              <div className="mt-6 rounded-[1.75rem] border border-slate-200/70 bg-white p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">About this product</p>
-                <p className="mt-3 text-sm leading-7 text-ink-900/70">
-                  {product.description || "Clean product information, stronger visual hierarchy, and a focused purchase flow make this page easier to review and trust."}
-                </p>
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                  <AddToCartButton product={product} className="h-12 w-full rounded-full text-base shadow-sm" />
-                  <Link
-                    href="/bag"
-                    className="inline-flex h-12 items-center justify-center rounded-full border border-blue-200 bg-white px-5 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
-                  >
-                    View bag
-                  </Link>
-                </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <AddToCartButton
+                  product={product}
+                  ariaLabel={`Add ${product.name} to your bag`}
+                  className="h-14 w-full rounded-full text-base shadow-sm focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-200"
+                />
+                <Link
+                  href="/bag"
+                  aria-label="View your shopping bag"
+                  className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-full border border-brand-200 bg-white px-5 text-base font-semibold text-brand-700 transition hover:border-brand-300 hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-100"
+                >
+                  View bag
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
               </div>
             </div>
           </div>

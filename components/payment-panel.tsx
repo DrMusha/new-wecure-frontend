@@ -253,10 +253,10 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
   }
 
   return (
-    <section className="rounded-[1.5rem] border border-white/80 bg-white p-5 pb-28 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)] sm:rounded-[2rem] sm:p-6 sm:pb-6">
+    <section className="rounded-[1.5rem] border border-brand-100 bg-[radial-gradient(circle_at_top_right,rgba(191,219,254,0.65),transparent_32%),linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-5 pb-28 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)] sm:rounded-[2rem] sm:p-6 sm:pb-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-xl border border-brand-100 bg-brand-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">
+          <div className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">
             <ShieldCheck className="h-4 w-4" aria-hidden="true" />
             Secure mobile money
           </div>
@@ -265,17 +265,17 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
             Enter one mobile money number. We detect the network, send a prompt to your phone, and confirm the result here.
           </p>
         </div>
-        <Button type="button" variant="secondary" onClick={refreshPayments} disabled={refreshing || pending} className="self-start px-4 py-2.5">
+        <Button type="button" variant="secondary" onClick={refreshPayments} disabled={refreshing || pending} className="h-10 self-start rounded-full px-4">
           {refreshing ? "Refreshing..." : "Refresh"}
         </Button>
       </div>
 
       <PaymentStatusWidget payment={latestPayment} pending={pending} />
       {!isSuccessful && !hasStartedPayment ? (
-        <ol className="mt-5 grid gap-2 rounded-2xl bg-sand-50 p-4 text-sm text-ink-900/70 sm:grid-cols-3">
+        <ol className="mt-5 grid gap-2 rounded-[1.25rem] border border-sand-200 bg-white/80 p-4 text-sm text-ink-900/70 sm:grid-cols-3">
           <li><span className="mr-2 font-semibold text-brand-700">1.</span>Enter your number</li>
           <li><span className="mr-2 font-semibold text-brand-700">2.</span>Approve the prompt</li>
-          <li><span className="mr-2 font-semibold text-brand-700">3.</span>Wait for confirmation</li>
+          <li><span className="mr-2 font-semibold text-brand-700">3.</span>Stay on this page</li>
         </ol>
       ) : null}
       {error ? <div className="mt-4"><AuthMessage tone="error">{error}</AuthMessage></div> : null}
@@ -283,7 +283,7 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
 
       {!isSuccessful ? (
         <form id="mobile-money-form" className="mt-6 grid gap-4" onSubmit={handleSubmit}>
-          {!hasStartedPayment ? <NetworkBadges /> : null}
+          {!hasStartedPayment ? <><p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-900/55">Supported networks</p><NetworkBadges /></> : null}
 
           <div className="space-y-2">
             <label className="text-sm font-semibold text-ink-900">Mobile money number</label>
@@ -300,12 +300,12 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <Input value={form.firstName} onChange={(e) => setForm((prev) => ({ ...prev, firstName: e.target.value }))} placeholder="First name" disabled={isProcessing} className="h-12 border-sand-200 bg-white" />
-            <Input value={form.lastName} onChange={(e) => setForm((prev) => ({ ...prev, lastName: e.target.value }))} placeholder="Last name" disabled={isProcessing} className="h-12 border-sand-200 bg-white" />
+            <label className="grid gap-2 text-sm font-semibold text-ink-900"><span>First name</span><Input value={form.firstName} onChange={(e) => setForm((prev) => ({ ...prev, firstName: e.target.value }))} placeholder="First name" disabled={isProcessing} className="h-12 border-sand-200 bg-white" /></label>
+            <label className="grid gap-2 text-sm font-semibold text-ink-900"><span>Last name</span><Input value={form.lastName} onChange={(e) => setForm((prev) => ({ ...prev, lastName: e.target.value }))} placeholder="Last name" disabled={isProcessing} className="h-12 border-sand-200 bg-white" /></label>
           </div>
-          <Input value={form.email} onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))} type="email" placeholder="Email" disabled={isProcessing} className="h-12 border-sand-200 bg-white" />
+          <label className="grid gap-2 text-sm font-semibold text-ink-900"><span>Email address</span><Input value={form.email} onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))} type="email" placeholder="you@example.com" disabled={isProcessing} className="h-12 border-sand-200 bg-white" /></label>
           <p className="text-xs leading-5 text-ink-900/55">A mobile-money prompt should appear after you send the request. If it does not, check the number and try again.</p>
-          <Button type="submit" disabled={isProcessing} className="hidden sm:inline-flex">
+          <Button type="submit" disabled={isProcessing} className="hidden h-14 rounded-full text-base sm:inline-flex">
             {isProcessing ? "Awaiting confirmation..." : "Send payment request"}
           </Button>
         </form>
@@ -318,7 +318,7 @@ export function PaymentPanel({ orderId, amount, orderNumber }: PaymentPanelProps
               <p className="text-xs font-medium text-ink-900/55">Total</p>
               <p className="truncate text-lg font-semibold text-ink-950">ZMW {Number(amount || 0).toFixed(2)}</p>
             </div>
-            <Button type="submit" form="mobile-money-form" disabled={isProcessing} className="h-12 shrink-0 px-4">
+            <Button type="submit" form="mobile-money-form" disabled={isProcessing} className="h-12 shrink-0 rounded-full px-5">
               {isProcessing ? "Waiting" : "Pay now"}
             </Button>
           </div>

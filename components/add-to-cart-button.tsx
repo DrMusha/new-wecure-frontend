@@ -12,9 +12,10 @@ type AddToCartButtonProps = {
   product: Product;
   className?: string;
   compact?: boolean;
+  ariaLabel?: string;
 };
 
-export function AddToCartButton({ product, className, compact = false }: AddToCartButtonProps) {
+export function AddToCartButton({ product, className, compact = false, ariaLabel }: AddToCartButtonProps) {
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export function AddToCartButton({ product, className, compact = false }: AddToCa
   }
 
   return <>
-    <Button type="button" onClick={handleAdd} className={cn("gap-2", className)}>
+    <Button type="button" onClick={handleAdd} aria-label={ariaLabel} className={cn("gap-2 rounded-full", className)}>
       {added ? <Check className="h-4 w-4 shrink-0" /> : <ShoppingBag className="h-4 w-4 shrink-0" />}
       {compact ? (
         <>
