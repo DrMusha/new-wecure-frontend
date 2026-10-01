@@ -40,19 +40,19 @@ export function SiteFooter() {
               >
                 Shop products
               </Link>
-              <Link
-                href="/contact"
+              <a
+                href="mailto:info@wecurepharmacy.com"
                 className="inline-flex items-center justify-center rounded-full border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
               >
-                Talk to support
-              </Link>
+                Email support
+              </a>
             </div>
 
             <div className="mt-6 grid gap-3 sm:mt-8 sm:grid-cols-3">
               {[
-                { title: "Always updated", text: "Products and orders stay up to date" },
-                { title: "Fast delivery", text: "Built for nationwide reach" },
-                { title: "Secure checkout", text: "Checkout with confidence" },
+                { title: "Genuine medicines", text: "Trusted pharmacy essentials" },
+                { title: "Open 24/7", text: "Support when you need it" },
+                { title: "Secure payments", text: "Checkout with confidence" },
               ].map((item) => (
                 <div key={item.title} className="rounded-2xl border border-slate-200/70 bg-slate-50 p-4">
                   <div className="flex items-center gap-2 text-blue-600">
@@ -92,21 +92,21 @@ export function SiteFooter() {
             <div className="mt-5 space-y-4 text-sm text-gray-700">
               <p className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
-                <span>Zambia, built for nationwide delivery</span>
+                <span>Avondale: Great East & Acacia Roads, Lusaka<br />Chalala: Joe Chibangu Road, next to Buffalo Park<br />Cairo Road: Provident House (collections only)</span>
               </p>
               <p className="flex gap-3">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
-                <span>support@wecure.example</span>
+                <a href="mailto:info@wecurepharmacy.com" className="hover:text-blue-700">info@wecurepharmacy.com</a>
               </p>
               <p className="flex gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
-                <span>+260 000 000 000</span>
+                <a href="tel:+260771230217" className="hover:text-blue-700">+260 771 230 217</a>
               </p>
             </div>
 
             <div className="mt-8">
               <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-blue-700">
-                Support
+                Operations
               </h3>
               <div className="mt-4 flex flex-col gap-3">
                 {supportLinks.map((link) => (
@@ -118,6 +118,7 @@ export function SiteFooter() {
                     {link.label}
                   </Link>
                 ))}
+                <span className="rounded-2xl border border-slate-200/70 bg-slate-50 px-4 py-3 text-sm font-medium text-gray-700">Open 24/7</span>
               </div>
             </div>
           </div>

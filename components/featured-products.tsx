@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { listProducts } from "@/lib/backend";
 import { LoadingProductCard, ProductCard } from "@/components/product-card";
+import Link from "next/link";
 
 async function getFeaturedProducts() {
   return listProducts({ status: "published", isFeatured: true, limit: 8 }).catch(() => []);
@@ -52,6 +53,7 @@ async function FeaturedProductsList() {
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
+      <div className="col-span-full mt-2 flex justify-center"><Link href="/products" className="rounded-full border border-brand-200 bg-white px-5 py-3 text-sm font-semibold text-brand-700 transition hover:bg-brand-50">View all products</Link></div>
     </div>
   );
 }
